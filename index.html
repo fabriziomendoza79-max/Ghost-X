@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>   Ghost X  </title>
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<audio id="musica" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+
+
+
+
+    <!-- ==========================================
+    CURSOR PERSONALIZADO CON IMAGEN (SIN CÍRCULO)
+    ========================================== -->
+    <div class="custom-cursor" id="customCursor">
+        <img src="cursor/mi-cursor.png" alt="Cursor" id="cursorImage">
+    </div>
+
+    <!-- ==========================================
+    EFECTO DE CLICK (PARTÍCULAS)
+    ========================================== -->
+    <canvas id="clickCanvas"></canvas>
+
+    <!-- ==========================================
+    PANTALLA DE LOGIN (VIDEO DE FONDO)
+    ========================================== -->
+    <div class="login-screen" id="loginScreen">
+        
+        <div class="login-video-bg">
+            <video autoplay muted loop playsinline preload="metadata">
+                <source src="videos/mi-video.mp4" type="video/mp4">
+                <source src="videos/mi-video.webm" type="video/webm">
+                <source src="videos/mi-video.ogg" type="video/ogg">
+                Tu navegador no soporta video HTML5.
+            </video>
+            <div class="video-overlay-login"></div>
+        </div>
+
+        <div class="login-container-right">
+            <div class="login-box">
+                <div class="login-logo">
+                    <i class="fas fa-shield-halved"></i>
+                    <h1>Ghost X</h1>
+                    <p>Panel de control avanzado</p>
+                </div>
+
+                <div id="loginFormContainer">
+                    <h2><i class="fas fa-lock"></i> Iniciar Sesión</h2>
+                    
+                    <form class="login-form" id="loginForm">
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" placeholder="Usuario" id="usernameInput" required>
+                            <span class="input-focus-border"></span>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" placeholder="Contraseña" id="passwordInput" required>
+                            <span class="input-focus-border"></span>
+                        </div>
+                        <button type="submit" class="btn-login" id="loginBtn">
+                            <span class="btn-text"><i class="fas fa-arrow-right-to-bracket"></i> Ingresar</span>
+                            <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
+                            <span class="btn-success"><i class="fas fa-check-circle"></i></span>
+                        </button>
+                    </form>
+
+                    <div class="login-options">
+                        <span class="register-link" id="showRegister">
+                            <i class="fas fa-user-plus"></i> ¿No tienes cuenta? <strong>Regístrate</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div id="registerFormContainer" style="display: none;">
+                    <h2><i class="fas fa-user-plus"></i> Crear Cuenta</h2>
+                    
+                    <form class="login-form" id="registerForm">
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" placeholder="Nombre de usuario" id="regUsername" required>
+                            <span class="input-focus-border"></span>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" placeholder="Correo electrónico" id="regEmail" required>
+                            <span class="input-focus-border"></span>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" placeholder="Contraseña" id="regPassword" required>
+                            <span class="input-focus-border"></span>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" placeholder="Confirmar contraseña" id="regConfirmPassword" required>
+                            <span class="input-focus-border"></span>
+                        </div>
+                        <button type="submit" class="btn-login" id="registerBtn">
+                            <span class="btn-text"><i class="fas fa-user-plus"></i> Registrarse</span>
+                            <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
+                            <span class="btn-success"><i class="fas fa-check-circle"></i></span>
+                        </button>
+                    </form>
+
+                    <div class="login-options">
+                        <span class="register-link" id="showLogin">
+                            <i class="fas fa-arrow-left"></i> Volver al <strong>Inicio de Sesión</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="login-footer-text">
+                    <span>© 2026 FiveHack · Todos los derechos reservados</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    MODAL DE NOTIFICACIONES
+    ========================================== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-icon" id="modalIcon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="modal-title" id="modalTitle">¡Éxito!</h3>
+            <p class="modal-message" id="modalMessage">Operación completada correctamente.</p>
+            <button class="modal-btn" id="modalBtn">Aceptar</button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    PANTALLA DE CARGA
+    ========================================== -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner-circle"></div>
+            <p class="loading-text">Ingresando...</p>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    PANEL DE PRODUCTOS
+    ========================================== -->
+    <div class="main-panel" id="mainPanel">
+        
+        <div class="products-video-bg">
+            <video autoplay muted loop playsinline preload="metadata">
+                <source src="videos/productos-video.mp4" type="video/mp4">
+                <source src="videos/productos-video.webm" type="video/webm">
+                <source src="videos/productos-video.ogg" type="video/ogg">
+                Tu navegador no soporta video HTML5.
+            </video>
+            <div class="video-overlay-products"></div>
+        </div>
+
+        <div class="products-overlay">
+            <div class="products-container">
+                <div class="products-header">
+                    <h2><i class="fas fa-store"></i> Tienda de Hacks</h2>
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userDisplay">Usuario</span>
+                        <button class="btn-logout" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                        </button>
+                    </div>
+                </div>
+
+                <div class="products-grid">
+                    <!-- PRODUCTO 1 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="img/aimbot.png" alt="Aimbot Pro">
+                            <span class="product-badge">Top</span>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">1 DIA </h3>
+                            <p class="product-description">Con nuestro NUEVO y REVOLUCIONARIO HACK para GTA V, podrás dominar Los Santos como nunca antes. Olvídate de
+                                 grindear misiones o de que te eliminen. Con nuestro menú PRO, tendrás el control TOTAL..</p>
+                            <div class="product-footer">
+                                <span class="product-price"><i class="fas fa-coins"></i> S/ 9 </span>
+                                <button class="btn-buy" data-product="Aimbot Pro" data-price="9 soles">
+                                    <i class="fab fa-whatsapp"></i> Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCTO 2 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="img/wallhack.png" alt="Wallhack X">
+                            <span class="product-badge">Popular</span>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">15 DIAS </h3>
+                            <p class="product-description">Con nuestro NUEVO y REVOLUCIONARIO HACK para GTA V, podrás dominar Los Santos como nunca antes. Olvídate de
+                                 grindear misiones o de que te eliminen. Con nuestro menú PRO, tendrás el control TOTAL.</p>
+                            <div class="product-footer">
+                                <span class="product-price"><i class="fas fa-coins"></i> S/ 18</span>
+                                <button class="btn-buy" data-product="Wallhack X" data-price="18 soles">
+                                    <i class="fab fa-whatsapp"></i> Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCTO 3 -->
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="img/godmode.png" alt="GodMode++">
+                            <span class="product-badge">Élite</span>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">30 DIAS </h3>
+                            <p class="product-description">Con nuestro NUEVO y REVOLUCIONARIO HACK para GTA V, podrás dominar Los Santos como nunca antes. Olvídate de
+                                 grindear misiones o de que te eliminen. Con nuestro menú PRO, tendrás el control TOTAL.</p>
+                            <div class="product-footer">
+                                <span class="product-price"><i class="fas fa-coins"></i> S/ 30</span>
+                                <button class="btn-buy" data-product="GodMode++" data-price="30 SOLES">
+                                    <i class="fab fa-whatsapp"></i> Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script src="script.js"></script>
+
+<script>
+const musica = document.getElementById("musica");
+
+musica.volume = 0.5;
+
+document.addEventListener("mousemove", function() {
+    musica.play().catch(function(error) {
+        console.log("No se pudo iniciar la música:", error);
+    });
+}, { once: true });
+</script>
+
+</body>
+</html>
