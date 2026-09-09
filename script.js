@@ -1,1005 +1,291 @@
-(function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-    'use strict';
-
-
-    /* ========================================
-       ELEMENTOS DOM
-    ======================================== */
+    /* =====================================================
+       ELEMENTOS
+    ====================================================== */
 
     const welcomeScreen =
-        document.getElementById('welcomeScreen');
-
-    const continueBtn =
-        document.getElementById('continueBtn');
-
-    const musica =
-        document.getElementById('musica');
-
-
-    const loginForm =
-        document.getElementById('loginForm');
-
-    const registerForm =
-        document.getElementById('registerForm');
+        document.getElementById("welcomeScreen");
 
     const loginScreen =
-        document.getElementById('loginScreen');
+        document.getElementById("loginScreen");
 
     const mainPanel =
-        document.getElementById('mainPanel');
+        document.getElementById("mainPanel");
 
-    const usernameInput =
-        document.getElementById('usernameInput');
+    const continueBtn =
+        document.getElementById("continueBtn");
 
-    const passwordInput =
-        document.getElementById('passwordInput');
+    const loginForm =
+        document.getElementById("loginForm");
 
-    const userDisplay =
-        document.getElementById('userDisplay');
+    const registerForm =
+        document.getElementById("registerForm");
+
+    const loginFormContainer =
+        document.getElementById("loginFormContainer");
+
+    const registerFormContainer =
+        document.getElementById("registerFormContainer");
+
+    const showRegisterBtn =
+        document.getElementById("showRegister");
+
+    const backLoginBtn =
+        document.getElementById("showLogin");
 
     const logoutBtn =
-        document.getElementById('logoutBtn');
+        document.getElementById("logoutBtn");
 
-    const loginBtn =
-        document.getElementById('loginBtn');
+    const userDisplay =
+        document.getElementById("userDisplay");
 
-    const registerBtn =
-        document.getElementById('registerBtn');
+    const musica =
+        document.getElementById("musica");
 
+    const customCursor =
+        document.getElementById("customCursor");
 
-    const loginContainer =
-        document.getElementById('loginFormContainer');
+    const modal =
+        document.getElementById("modal");
 
-    const registerContainer =
-        document.getElementById('registerFormContainer');
+    const closeModal =
+        document.getElementById("closeModal");
 
-    const showRegisterLink =
-        document.getElementById('showRegister');
-
-    const showLoginLink =
-        document.getElementById('showLogin');
-
-
-    const regUsername =
-        document.getElementById('regUsername');
-
-    const regEmail =
-        document.getElementById('regEmail');
-
-    const regPassword =
-        document.getElementById('regPassword');
-
-    const regConfirmPassword =
-        document.getElementById('regConfirmPassword');
-
-
-    const modalOverlay =
-        document.getElementById('modalOverlay');
-
-    const modalIcon =
-        document.getElementById('modalIcon');
+    const modalButton =
+        document.getElementById("modalButton");
 
     const modalTitle =
-        document.getElementById('modalTitle');
+        document.getElementById("modalTitle");
 
     const modalMessage =
-        document.getElementById('modalMessage');
-
-    const modalBtn =
-        document.getElementById('modalBtn');
-
+        document.getElementById("modalMessage");
 
     const loadingOverlay =
-        document.getElementById('loadingOverlay');
+        document.getElementById("loadingOverlay");
 
 
-    const loginVideo =
-        document.querySelector(
-            '.login-video-bg video'
-        );
+    /* =====================================================
+       USUARIOS
+    ====================================================== */
 
-    const productsVideo =
-        document.querySelector(
-            '.products-video-bg video'
-        );
-
-
-    /* ========================================
-       MÚSICA
-    ======================================== */
-
-    let musicStarted = false;
-
-    if (musica) {
-        musica.volume = 0.5;
-    }
-
-
-    /*
-       IMPORTANTE:
-
-       La música NO se inicia con mousemove.
-
-       Solamente se inicia cuando el usuario
-       pulsa el botón de bienvenida.
-    */
-
-    if (continueBtn && welcomeScreen) {
-
-        continueBtn.addEventListener(
-            'click',
-            async function () {
-
-                continueBtn.classList.add('loading');
-
-                /*
-                   El play ocurre directamente dentro
-                   del click del usuario, por lo que
-                   cumple con las restricciones de
-                   autoplay de los navegadores.
-                */
-
-                if (musica && !musicStarted) {
-
-                    try {
-
-                        musica.volume = 0.5;
-
-                        await musica.play();
-
-                        musicStarted = true;
-
-                        console.log(
-                            '🎵 Música iniciada correctamente'
-                        );
-
-                    } catch (error) {
-
-                        console.log(
-                            'No se pudo iniciar la música:',
-                            error
-                        );
-
-                    }
-
-                }
-
-
-                /*
-                   Ocultar pantalla de bienvenida.
-                */
-
-                welcomeScreen.classList.add('hidden');
-
-
-                /*
-                   Eliminamos completamente la pantalla
-                   después de la animación.
-                */
-
-                setTimeout(function () {
-
-                    welcomeScreen.style.display = 'none';
-
-                }, 900);
-
-            }
-        );
-
-    }
-
-
-    /* ========================================
-       BASE DE DATOS DE USUARIOS
-    ======================================== */
-
-    let users = {
-
-        'admin': '1234'
-
+    const users = {
+        admin: "1234"
     };
 
 
-    /* ========================================
-       CURSOR PERSONALIZADO
-    ======================================== */
+    /* =====================================================
+       MÚSICA
+    ====================================================== */
 
-    const customCursor =
-        document.getElementById('customCursor');
+    let musicaIniciada = false;
 
-    let mouseX = 0;
-    let mouseY = 0;
+    function iniciarMusica() {
 
-    let cursorX = 0;
-    let cursorY = 0;
+        if (!musica) {
+            return;
+        }
 
+        musica.volume = 0.35;
+
+        musica.play()
+            .then(() => {
+
+                musicaIniciada = true;
+
+            })
+            .catch(() => {
+
+                /*
+                   El navegador puede bloquear el audio
+                   hasta que exista una interacción.
+                */
+
+            });
+
+    }
+
+
+    /* =====================================================
+       CURSOR
+    ====================================================== */
 
     document.addEventListener(
-        'mousemove',
-        function (e) {
-
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            cursorX +=
-                (mouseX - cursorX) * 0.3;
-
-            cursorY +=
-                (mouseY - cursorY) * 0.3;
+        "mousemove",
+        (event) => {
 
             if (customCursor) {
 
                 customCursor.style.left =
-                    cursorX + 'px';
+                    event.clientX + "px";
 
                 customCursor.style.top =
-                    cursorY + 'px';
+                    event.clientY + "px";
 
+            }
+
+            /*
+               Intentamos activar la música al mover
+               el cursor.
+            */
+
+            if (!musicaIniciada) {
+                iniciarMusica();
             }
 
         }
     );
 
 
-    /* ========================================
-       ELEMENTOS INTERACTIVOS
-    ======================================== */
-
-    const interactiveElements =
-        document.querySelectorAll(
-            'button, a, .btn-login, .btn-buy, ' +
-            '.register-link, .btn-logout, ' +
-            '.input-group input, .welcome-btn'
-        );
-
-
-    interactiveElements.forEach(
-        function (el) {
-
-            el.addEventListener(
-                'mouseenter',
-                function () {
-
-                    if (customCursor) {
-
-                        customCursor.classList.add(
-                            'aiming'
-                        );
-
-                    }
-
-                }
-            );
-
-
-            el.addEventListener(
-                'mouseleave',
-                function () {
-
-                    if (customCursor) {
-
-                        customCursor.classList.remove(
-                            'aiming'
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-    /* ========================================
-       CLICK
-    ======================================== */
+    /* =====================================================
+       CLIC PARA MÚSICA
+    ====================================================== */
 
     document.addEventListener(
-        'mousedown',
-        function (e) {
+        "click",
+        () => {
 
-            if (customCursor) {
-
-                customCursor.classList.add(
-                    'clicking'
-                );
-
-            }
-
-            createClickEffect(
-                e.clientX,
-                e.clientY
-            );
-
-        }
-    );
-
-
-    document.addEventListener(
-        'mouseup',
-        function () {
-
-            if (customCursor) {
-
-                customCursor.classList.remove(
-                    'clicking'
-                );
-
+            if (!musicaIniciada) {
+                iniciarMusica();
             }
 
         }
     );
 
 
-    document.addEventListener(
-        'mouseleave',
-        function () {
-
-            if (customCursor) {
-
-                customCursor.style.opacity = '0';
-
-            }
-
-        }
-    );
-
-
-    document.addEventListener(
-        'mouseenter',
-        function () {
-
-            if (customCursor) {
-
-                customCursor.style.opacity = '1';
-
-            }
-
-        }
-    );
-
-
-    /* ========================================
-       EFECTO CLICK
-    ======================================== */
-
-    const canvas =
-        document.getElementById('clickCanvas');
-
-    const ctx =
-        canvas.getContext('2d');
-
-
-    function resizeCanvas() {
-
-        canvas.width =
-            window.innerWidth;
-
-        canvas.height =
-            window.innerHeight;
-
-    }
-
-
-    resizeCanvas();
-
-    window.addEventListener(
-        'resize',
-        resizeCanvas
-    );
-
-
-    let particles = [];
-    let shockRings = [];
-
-
-    class Particle {
-
-        constructor(x, y) {
-
-            this.x = x;
-            this.y = y;
-
-            const angle =
-                Math.random() *
-                Math.PI * 2;
-
-            const speed =
-                Math.random() * 10 + 3;
-
-            this.vx =
-                Math.cos(angle) * speed;
-
-            this.vy =
-                Math.sin(angle) * speed;
-
-            this.size =
-                Math.random() * 5 + 2;
-
-
-            const colors = [
-
-                '#ff1744',
-                '#ff6b6b',
-                '#ff4081',
-                '#ffd700',
-                '#ffea00',
-                '#ff9100',
-                '#00d4ff',
-                '#00e676',
-                '#7b2ffc'
-
-            ];
-
-
-            this.color =
-                colors[
-                    Math.floor(
-                        Math.random() *
-                        colors.length
-                    )
-                ];
-
-
-            this.life = 1;
-
-            this.decay =
-                Math.random() * 0.02 + 0.015;
-
-            this.gravity = 0.08;
-
-            this.friction = 0.97;
-
-        }
-
-
-        update() {
-
-            this.vx *=
-                this.friction;
-
-            this.vy *=
-                this.friction;
-
-            this.vy +=
-                this.gravity;
-
-            this.x +=
-                this.vx;
-
-            this.y +=
-                this.vy;
-
-            this.life -=
-                this.decay;
-
-            this.size *= 0.99;
-
-        }
-
-
-        draw() {
-
-            ctx.save();
-
-            ctx.globalAlpha =
-                this.life;
-
-            ctx.shadowColor =
-                this.color;
-
-            ctx.shadowBlur =
-                15;
-
-            ctx.fillStyle =
-                this.color;
-
-            ctx.beginPath();
-
-
-            if (this.size > 3) {
-
-                const spikes = 5;
-
-                const outerRadius =
-                    this.size;
-
-                const innerRadius =
-                    this.size * 0.4;
-
-
-                for (
-                    let i = 0;
-                    i < spikes * 2;
-                    i++
-                ) {
-
-                    const radius =
-                        i % 2 === 0
-                            ? outerRadius
-                            : innerRadius;
-
-                    const angle =
-                        (i * Math.PI) /
-                        spikes -
-                        Math.PI / 2;
-
-
-                    const x =
-                        Math.cos(angle) *
-                        radius;
-
-                    const y =
-                        Math.sin(angle) *
-                        radius;
-
-
-                    if (i === 0) {
-
-                        ctx.moveTo(x, y);
-
-                    } else {
-
-                        ctx.lineTo(x, y);
-
-                    }
-
-                }
-
-
-                ctx.closePath();
-                ctx.fill();
-
-            } else {
-
-                ctx.arc(
-                    0,
-                    0,
-                    this.size,
-                    0,
-                    Math.PI * 2
-                );
-
-                ctx.fill();
-
-            }
-
-
-            ctx.restore();
-
-        }
-
-    }
-
-
-    function createClickEffect(x, y) {
-
-        const count =
-            Math.floor(
-                Math.random() * 20
-            ) + 25;
-
-
-        for (
-            let i = 0;
-            i < count;
-            i++
-        ) {
-
-            particles.push(
-                new Particle(x, y)
-            );
-
-        }
-
-
-        shockRings.push({
-
-            x: x,
-            y: y,
-            radius: 5,
-            maxRadius: 40,
-            life: 1,
-            decay: 0.03
-
-        });
-
-    }
-
-
-    function animateParticles() {
-
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        for (
-            let i = particles.length - 1;
-            i >= 0;
-            i--
-        ) {
-
-            particles[i].update();
-
-            particles[i].draw();
-
-
-            if (
-                particles[i].life <= 0 ||
-                particles[i].size < 0.5
-            ) {
-
-                particles.splice(i, 1);
-
-            }
-
-        }
-
-
-        for (
-            let i = shockRings.length - 1;
-            i >= 0;
-            i--
-        ) {
-
-            const ring =
-                shockRings[i];
-
-            ring.radius += 2;
-
-            ring.life -=
-                ring.decay;
-
-
-            ctx.save();
-
-            ctx.globalAlpha =
-                ring.life * 0.5;
-
-            ctx.strokeStyle =
-                '#ff1744';
-
-            ctx.lineWidth = 2;
-
-            ctx.shadowColor =
-                '#ff1744';
-
-            ctx.shadowBlur = 20;
-
-            ctx.beginPath();
-
-            ctx.arc(
-                ring.x,
-                ring.y,
-                ring.radius,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.stroke();
-
-            ctx.restore();
-
-
-            if (ring.life <= 0) {
-
-                shockRings.splice(i, 1);
-
-            }
-
-        }
-
-
-        requestAnimationFrame(
-            animateParticles
-        );
-
-    }
-
-
-    animateParticles();
-
-
-    /* ========================================
+    /* =====================================================
        MODAL
-    ======================================== */
+    ====================================================== */
 
-    function showModal(
-        type,
-        title,
-        message
-    ) {
+    function showModal(title, message) {
 
-        modalIcon.className =
-            'modal-icon ' + type;
-
-
-        if (type === 'success') {
-
-            modalIcon.innerHTML =
-                '<i class="fas fa-check-circle"></i>';
-
-        } else if (type === 'error') {
-
-            modalIcon.innerHTML =
-                '<i class="fas fa-times-circle"></i>';
-
-        } else {
-
-            modalIcon.innerHTML =
-                '<i class="fas fa-info-circle"></i>';
-
+        if (!modal) {
+            return;
         }
 
+        if (modalTitle) {
+            modalTitle.textContent = title;
+        }
 
-        modalTitle.textContent =
-            title;
+        if (modalMessage) {
+            modalMessage.textContent = message;
+        }
 
-        modalMessage.textContent =
-            message;
+        modal.style.display = "flex";
 
-        modalOverlay.classList.add(
-            'active'
+    }
+
+
+    function closeModalWindow() {
+
+        if (modal) {
+            modal.style.display = "none";
+        }
+
+    }
+
+
+    if (closeModal) {
+
+        closeModal.addEventListener(
+            "click",
+            closeModalWindow
         );
 
     }
 
 
-    modalBtn.addEventListener(
-        'click',
-        function () {
+    if (modalButton) {
 
-            modalOverlay.classList.remove(
-                'active'
-            );
+        modalButton.addEventListener(
+            "click",
+            closeModalWindow
+        );
 
-        }
-    );
+    }
 
 
-    modalOverlay.addEventListener(
-        'click',
-        function (e) {
+    if (modal) {
 
-            if (
-                e.target === modalOverlay
-            ) {
+        modal.addEventListener(
+            "click",
+            (event) => {
 
-                modalOverlay.classList.remove(
-                    'active'
-                );
+                if (event.target === modal) {
+
+                    closeModalWindow();
+
+                }
 
             }
+        );
 
-        }
-    );
+    }
 
 
-    /* ========================================
+    /* =====================================================
        LOADING
-    ======================================== */
+    ====================================================== */
 
     function showLoading() {
 
-        loadingOverlay.classList.add(
-            'active'
-        );
+        if (loadingOverlay) {
+
+            loadingOverlay.style.display =
+                "flex";
+
+        }
 
     }
 
 
     function hideLoading() {
 
-        loadingOverlay.classList.remove(
-            'active'
-        );
+        if (loadingOverlay) {
 
-    }
-
-
-    /* ========================================
-       LOGIN / REGISTRO
-    ======================================== */
-
-    if (showRegisterLink) {
-
-        showRegisterLink.addEventListener(
-            'click',
-            function (e) {
-
-                e.preventDefault();
-
-                loginContainer.style.display =
-                    'none';
-
-                registerContainer.style.display =
-                    'block';
-
-            }
-        );
-
-    }
-
-
-    if (showLoginLink) {
-
-        showLoginLink.addEventListener(
-            'click',
-            function (e) {
-
-                e.preventDefault();
-
-                registerContainer.style.display =
-                    'none';
-
-                loginContainer.style.display =
-                    'block';
-
-            }
-        );
-
-    }
-
-
-    /* ========================================
-       ABRIR PANEL
-    ======================================== */
-
-    function openPanel(username) {
-
-        loginScreen.classList.add(
-            'hidden'
-        );
-
-        mainPanel.classList.add(
-            'active'
-        );
-
-        userDisplay.textContent =
-            username;
-
-
-        if (loginVideo) {
-
-            loginVideo.pause();
+            loadingOverlay.style.display =
+                "none";
 
         }
 
-
-        if (productsVideo) {
-
-            productsVideo
-                .play()
-                .catch(function () {});
-
-        }
-
-
-        console.log(
-            '✅ Panel abierto para: ' +
-            username
-        );
-
     }
 
 
-    /* ========================================
-       LOGIN
-    ======================================== */
+    /* =====================================================
+       CONTINUAR
+    ====================================================== */
 
-    if (loginForm) {
+    if (continueBtn) {
 
-        loginForm.addEventListener(
-            'submit',
-            function (e) {
+        continueBtn.addEventListener(
+            "click",
+            () => {
 
-                e.preventDefault();
+                iniciarMusica();
 
+                if (welcomeScreen) {
 
-                const username =
-                    usernameInput.value.trim();
-
-                const password =
-                    passwordInput.value.trim();
-
-
-                if (!username || !password) {
-
-                    showModal(
-                        'error',
-                        'Campos incompletos',
-                        'Por favor, completa todos los campos.'
-                    );
-
-                    return;
+                    welcomeScreen.style.display =
+                        "none";
 
                 }
 
+                if (loginScreen) {
 
-                loginBtn.classList.add(
-                    'loading'
-                );
+                    loginScreen.style.display =
+                        "flex";
 
-                showLoading();
+                }
 
+                const loginVideo =
+                    document.getElementById("loginVideo");
 
-                setTimeout(
-                    function () {
+                if (loginVideo) {
 
-                        if (
-                            users[username] &&
-                            users[username] === password
-                        ) {
+                    loginVideo.play()
+                        .catch(() => {});
 
-                            hideLoading();
-
-                            loginBtn.classList.remove(
-                                'loading'
-                            );
-
-                            loginBtn.classList.add(
-                                'success'
-                            );
-
-
-                            setTimeout(
-                                function () {
-
-                                    loginBtn.classList.remove(
-                                        'success'
-                                    );
-
-                                    openPanel(
-                                        username
-                                    );
-
-                                },
-                                500
-                            );
-
-
-                        } else {
-
-                            hideLoading();
-
-                            loginBtn.classList.remove(
-                                'loading'
-                            );
-
-                            loginBtn.classList.add(
-                                'error'
-                            );
-
-
-                            setTimeout(
-                                function () {
-
-                                    loginBtn.classList.remove(
-                                        'error'
-                                    );
-
-                                },
-                                600
-                            );
-
-
-                            showModal(
-                                'error',
-                                'Acceso denegado',
-                                'Usuario o contraseña incorrectos.'
-                            );
-
-                        }
-
-                    },
-                    1200
-                );
+                }
 
             }
         );
@@ -1007,173 +293,677 @@
     }
 
 
-    /* ========================================
+    /* =====================================================
+       MOSTRAR REGISTRO
+    ====================================================== */
+
+    if (showRegisterBtn) {
+
+        showRegisterBtn.addEventListener(
+            "click",
+            () => {
+
+                if (loginFormContainer) {
+
+                    loginFormContainer.style.display =
+                        "none";
+
+                }
+
+                if (registerFormContainer) {
+
+                    registerFormContainer.style.display =
+                        "block";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       VOLVER AL LOGIN
+    ====================================================== */
+
+    if (backLoginBtn) {
+
+        backLoginBtn.addEventListener(
+            "click",
+            () => {
+
+                if (registerFormContainer) {
+
+                    registerFormContainer.style.display =
+                        "none";
+
+                }
+
+                if (loginFormContainer) {
+
+                    loginFormContainer.style.display =
+                        "block";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
        REGISTRO
-    ======================================== */
+    ====================================================== */
 
     if (registerForm) {
 
         registerForm.addEventListener(
-            'submit',
-            function (e) {
+            "submit",
+            (event) => {
 
-                e.preventDefault();
+                event.preventDefault();
+
+                const usernameInput =
+                    document.getElementById(
+                        "regUsername"
+                    );
+
+                const passwordInput =
+                    document.getElementById(
+                        "regPassword"
+                    );
+
+                const confirmInput =
+                    document.getElementById(
+                        "regConfirmPassword"
+                    );
 
 
                 const username =
-                    regUsername.value.trim();
-
-                const email =
-                    regEmail.value.trim();
+                    usernameInput
+                        ? usernameInput.value.trim()
+                        : "";
 
                 const password =
-                    regPassword.value.trim();
+                    passwordInput
+                        ? passwordInput.value
+                        : "";
 
                 const confirmPassword =
-                    regConfirmPassword.value.trim();
+                    confirmInput
+                        ? confirmInput.value
+                        : "";
 
 
-                if (
-                    !username ||
-                    !email ||
-                    !password ||
-                    !confirmPassword
-                ) {
+                if (username.length < 3) {
 
                     showModal(
-                        'error',
-                        'Campos incompletos',
-                        'Por favor, completa todos los campos.'
+                        "USUARIO INVÁLIDO",
+                        "El usuario debe tener al menos 3 caracteres."
                     );
 
                     return;
-
                 }
 
 
                 if (password.length < 4) {
 
                     showModal(
-                        'error',
-                        'Contraseña corta',
-                        'La contraseña debe tener al menos 4 caracteres.'
+                        "CONTRASEÑA INVÁLIDA",
+                        "La contraseña debe tener al menos 4 caracteres."
                     );
 
                     return;
-
                 }
 
 
-                if (
-                    password !==
-                    confirmPassword
-                ) {
+                if (password !== confirmPassword) {
 
                     showModal(
-                        'error',
-                        'Contraseñas no coinciden',
-                        'Las contraseñas ingresadas no son iguales.'
+                        "CONTRASEÑAS DIFERENTES",
+                        "Las contraseñas no coinciden."
                     );
 
                     return;
-
                 }
 
 
                 if (users[username]) {
 
                     showModal(
-                        'error',
-                        'Usuario existente',
-                        'El usuario "' +
-                        username +
-                        '" ya está registrado.'
+                        "USUARIO EXISTENTE",
+                        "Ese usuario ya está registrado."
                     );
 
                     return;
+                }
+
+
+                users[username] =
+                    password;
+
+
+                if (usernameInput) {
+                    usernameInput.value = "";
+                }
+
+                if (passwordInput) {
+                    passwordInput.value = "";
+                }
+
+                if (confirmInput) {
+                    confirmInput.value = "";
+                }
+
+
+                if (registerFormContainer) {
+
+                    registerFormContainer.style.display =
+                        "none";
+
+                }
+
+                if (loginFormContainer) {
+
+                    loginFormContainer.style.display =
+                        "block";
 
                 }
 
 
-                registerBtn.classList.add(
-                    'loading'
+                showModal(
+                    "CUENTA CREADA",
+                    "Tu cuenta fue creada correctamente. Ahora puedes iniciar sesión."
                 );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+    ====================================================== */
+
+    if (loginForm) {
+
+        loginForm.addEventListener(
+            "submit",
+            (event) => {
+
+                event.preventDefault();
+
+                const usernameInput =
+                    document.getElementById(
+                        "usernameInput"
+                    );
+
+                const passwordInput =
+                    document.getElementById(
+                        "passwordInput"
+                    );
+
+
+                const username =
+                    usernameInput
+                        ? usernameInput.value.trim()
+                        : "";
+
+                const password =
+                    passwordInput
+                        ? passwordInput.value
+                        : "";
+
+
+                if (
+                    users[username] &&
+                    users[username] === password
+                ) {
+
+                    showLoading();
+
+
+                    setTimeout(
+                        () => {
+
+                            hideLoading();
+
+                            openPanel(
+                                username
+                            );
+
+                        },
+                        700
+                    );
+
+
+                } else {
+
+                    showModal(
+                        "DATOS INCORRECTOS",
+                        "El usuario o la contraseña no son correctos."
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ABRIR PANEL
+    ====================================================== */
+
+    function openPanel(username) {
+
+        if (welcomeScreen) {
+
+            welcomeScreen.style.display =
+                "none";
+
+        }
+
+        if (loginScreen) {
+
+            loginScreen.style.display =
+                "none";
+
+        }
+
+        if (mainPanel) {
+
+            mainPanel.style.display =
+                "block";
+
+        }
+
+
+        if (userDisplay) {
+
+            userDisplay.textContent =
+                username;
+
+        }
+
+
+        showStoreView(
+            "home"
+        );
+
+    }
+
+
+    /* =====================================================
+       CAMBIAR VISTAS
+    ====================================================== */
+
+    function showStoreView(viewName) {
+
+        const views = {
+
+            home:
+                document.getElementById(
+                    "homeView"
+                ),
+
+            features:
+                document.getElementById(
+                    "featuresView"
+                ),
+
+            panel:
+                document.getElementById(
+                    "panelView"
+                ),
+
+            prices:
+                document.getElementById(
+                    "pricesView"
+                )
+
+        };
+
+
+        Object.values(views)
+            .forEach(
+                (view) => {
+
+                    if (view) {
+
+                        view.classList
+                            .remove("active");
+
+                    }
+
+                }
+            );
+
+
+        if (views[viewName]) {
+
+            views[viewName]
+                .classList
+                .add("active");
+
+        }
+
+
+        const navButtons = {
+
+            home:
+                document.getElementById(
+                    "homeNavBtn"
+                ),
+
+            features:
+                document.getElementById(
+                    "featuresNavBtn"
+                ),
+
+            panel:
+                document.getElementById(
+                    "panelNavBtn"
+                ),
+
+            prices:
+                document.getElementById(
+                    "pricesNavBtn"
+                )
+
+        };
+
+
+        Object.values(navButtons)
+            .forEach(
+                (button) => {
+
+                    if (button) {
+
+                        button.classList
+                            .remove("active");
+
+                    }
+
+                }
+            );
+
+
+        if (navButtons[viewName]) {
+
+            navButtons[viewName]
+                .classList
+                .add("active");
+
+        }
+
+    }
+
+
+    /* =====================================================
+       NAVEGACIÓN
+    ====================================================== */
+
+    const homeNavBtn =
+        document.getElementById(
+            "homeNavBtn"
+        );
+
+    const featuresNavBtn =
+        document.getElementById(
+            "featuresNavBtn"
+        );
+
+    const panelNavBtn =
+        document.getElementById(
+            "panelNavBtn"
+        );
+
+    const pricesNavBtn =
+        document.getElementById(
+            "pricesNavBtn"
+        );
+
+
+    if (homeNavBtn) {
+
+        homeNavBtn.addEventListener(
+            "click",
+            () => {
+
+                showStoreView(
+                    "home"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (featuresNavBtn) {
+
+        featuresNavBtn.addEventListener(
+            "click",
+            () => {
+
+                showStoreView(
+                    "features"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (panelNavBtn) {
+
+        panelNavBtn.addEventListener(
+            "click",
+            () => {
+
+                showStoreView(
+                    "panel"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (pricesNavBtn) {
+
+        pricesNavBtn.addEventListener(
+            "click",
+            () => {
+
+                showStoreView(
+                    "prices"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       VER PANEL DESDE HOME
+    ====================================================== */
+
+    const homePanelBtn =
+        document.getElementById(
+            "homePanelBtn"
+        );
+
+    if (homePanelBtn) {
+
+        homePanelBtn.addEventListener(
+            "click",
+            () => {
+
+                showStoreView(
+                    "panel"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       VER PRECIOS
+    ====================================================== */
+
+    document
+        .querySelectorAll(".go-prices")
+        .forEach(
+            (button) => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        showStoreView(
+                            "prices"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       BOTONES DE COMPRA
+    ====================================================== */
+
+    document
+        .querySelectorAll(".buy-price")
+        .forEach(
+            (button) => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const product =
+                            button.dataset.product;
+
+                        const price =
+                            button.dataset.price;
+
+
+                        const phone =
+                            "51937074085";
+
+
+                        const message =
+                            `Hola, quiero comprar el plan ${product} de Ghost X por S/ ${price}.`;
+
+
+                        const whatsappURL =
+                            `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+
+                        window.open(
+                            whatsappURL,
+                            "_blank"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       CERRAR SESIÓN
+    ====================================================== */
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            () => {
 
                 showLoading();
 
 
                 setTimeout(
-                    function () {
-
-                        users[username] =
-                            password;
-
+                    () => {
 
                         hideLoading();
 
-                        registerBtn.classList.remove(
-                            'loading'
-                        );
+
+                        if (mainPanel) {
+
+                            mainPanel.style.display =
+                                "none";
+
+                        }
 
 
-                        showModal(
-                            'success',
-                            '¡Registro exitoso!',
-                            'Tu cuenta ha sido creada correctamente. Ahora inicia sesión.'
-                        );
+                        if (loginScreen) {
+
+                            loginScreen.style.display =
+                                "flex";
+
+                        }
 
 
-                        const modalClose =
-                            function () {
+                        if (loginFormContainer) {
 
-                                registerContainer.style.display =
-                                    'none';
+                            loginFormContainer.style.display =
+                                "block";
 
-                                loginContainer.style.display =
-                                    'block';
+                        }
 
 
-                                regUsername.value =
-                                    '';
+                        if (registerFormContainer) {
 
-                                regEmail.value =
-                                    '';
+                            registerFormContainer.style.display =
+                                "none";
 
-                                regPassword.value =
-                                    '';
-
-                                regConfirmPassword.value =
-                                    '';
+                        }
 
 
-                                usernameInput.value =
-                                    username;
+                        const usernameInput =
+                            document.getElementById(
+                                "usernameInput"
+                            );
 
-                                passwordInput.value =
-                                    '';
-
-
-                                modalBtn.removeEventListener(
-                                    'click',
-                                    modalClose
-                                );
-
-                            };
+                        const passwordInput =
+                            document.getElementById(
+                                "passwordInput"
+                            );
 
 
-                        modalBtn.addEventListener(
-                            'click',
-                            modalClose
-                        );
+                        if (usernameInput) {
 
+                            usernameInput.value =
+                                "";
 
-                        console.log(
-                            '✅ Nuevo usuario registrado: ' +
-                            username
-                        );
+                        }
+
+                        if (passwordInput) {
+
+                            passwordInput.value =
+                                "";
+
+                        }
 
                     },
-                    1200
+                    500
                 );
 
             }
@@ -1182,237 +972,116 @@
     }
 
 
-    /* ========================================
-       LOGOUT
-       LA MÚSICA NO SE DETIENE
-    ======================================== */
+    /* =====================================================
+       PARTÍCULAS AL HACER CLICK
+    ====================================================== */
 
-    if (logoutBtn) {
+    document.addEventListener(
+        "click",
+        (event) => {
 
-        logoutBtn.addEventListener(
-            'click',
-            function () {
+            for (
+                let i = 0;
+                i < 5;
+                i++
+            ) {
 
-                showModal(
-                    'info',
-                    'Cerrar sesión',
-                    '¿Estás seguro de que quieres cerrar sesión?'
+                const particle =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                particle.style.position =
+                    "fixed";
+
+                particle.style.left =
+                    event.clientX + "px";
+
+                particle.style.top =
+                    event.clientY + "px";
+
+                particle.style.width =
+                    "5px";
+
+                particle.style.height =
+                    "5px";
+
+                particle.style.borderRadius =
+                    "50%";
+
+                particle.style.background =
+                    "#a78bfa";
+
+                particle.style.pointerEvents =
+                    "none";
+
+                particle.style.zIndex =
+                    "999999";
+
+
+                const angle =
+                    Math.random() *
+                    Math.PI *
+                    2;
+
+                const distance =
+                    20 +
+                    Math.random() *
+                    35;
+
+
+                const x =
+                    Math.cos(angle) *
+                    distance;
+
+                const y =
+                    Math.sin(angle) *
+                    distance;
+
+
+                particle.animate(
+                    [
+                        {
+                            transform:
+                                "translate(0, 0) scale(1)",
+
+                            opacity: 1
+                        },
+
+                        {
+                            transform:
+                                `translate(${x}px, ${y}px) scale(0)`,
+
+                            opacity: 0
+                        }
+                    ],
+                    {
+                        duration: 500,
+
+                        easing:
+                            "ease-out"
+                    }
                 );
 
 
-                modalBtn.textContent =
-                    'Sí, cerrar sesión';
+                document.body.appendChild(
+                    particle
+                );
 
 
-                modalBtn.style.background =
-                    'linear-gradient(135deg, #ff1744, #d50000)';
+                setTimeout(
+                    () => {
 
+                        particle.remove();
 
-                const confirmLogout =
-                    function () {
-
-                        modalOverlay.classList.remove(
-                            'active'
-                        );
-
-
-                        mainPanel.classList.remove(
-                            'active'
-                        );
-
-                        loginScreen.classList.remove(
-                            'hidden'
-                        );
-
-
-                        usernameInput.value =
-                            '';
-
-                        passwordInput.value =
-                            '';
-
-
-                        if (productsVideo) {
-
-                            productsVideo.pause();
-
-                        }
-
-
-                        if (loginVideo) {
-
-                            loginVideo
-                                .play()
-                                .catch(function () {});
-
-                        }
-
-
-                        modalBtn.textContent =
-                            'Aceptar';
-
-                        modalBtn.style.background =
-                            'linear-gradient(135deg, rgba(0, 212, 255, 0.6), rgba(123, 47, 252, 0.6))';
-
-
-                        console.log(
-                            '👋 Sesión cerrada'
-                        );
-
-                    };
-
-
-                const originalModalClick =
-                    function () {
-
-                        modalOverlay.classList.remove(
-                            'active'
-                        );
-
-                    };
-
-
-                modalBtn.onclick =
-                    function (e) {
-
-                        e.stopPropagation();
-
-                        confirmLogout();
-
-                        modalBtn.onclick =
-                            originalModalClick;
-
-                    };
+                    },
+                    500
+                );
 
             }
-        );
-
-    }
-
-
-    /* ========================================
-       BOTONES DE COMPRA
-    ======================================== */
-
-    const buyButtons =
-        document.querySelectorAll(
-            '.btn-buy'
-        );
-
-
-    buyButtons.forEach(
-        function (btn) {
-
-            btn.addEventListener(
-                'click',
-                function (e) {
-
-                    e.stopPropagation();
-
-
-                    const productName =
-                        this.getAttribute(
-                            'data-product'
-                        ) || 'Producto';
-
-
-                    const productPrice =
-                        this.getAttribute(
-                            'data-price'
-                        ) || '0';
-
-
-                    /*
-                       CAMBIA ESTE NÚMERO POR EL TUYO
-                    */
-
-                    const phoneNumber =
-                        '51937074085';
-
-
-                    const message =
-                        encodeURIComponent(
-
-                            `🔥 *COMPRA DE PRODUCTO* 🔥\n\n` +
-
-                            `✅ *Producto:* ${productName}\n` +
-
-                            `💰 *Precio:* S/ ${productPrice}\n` +
-
-                            `🛡️ *Tienda:* Ghost X\n` +
-
-                            `📅 *Fecha:* ${new Date().toLocaleDateString()}\n\n` +
-
-                            `👋 ¡Hola! Quiero comprar este producto.\n` +
-
-                            `¿Cómo puedo realizar el pago?`
-
-                        );
-
-
-                    const whatsappURL =
-                        `https://wa.me/${phoneNumber}?text=${message}`;
-
-
-                    showModal(
-                        'info',
-                        'Redirigiendo a WhatsApp',
-                        `Serás redirigido para comprar:\n${productName} - S/ ${productPrice}`
-                    );
-
-
-                    const redirect =
-                        function () {
-
-                            modalOverlay.classList.remove(
-                                'active'
-                            );
-
-
-                            window.open(
-                                whatsappURL,
-                                '_blank'
-                            );
-
-
-                            modalBtn.removeEventListener(
-                                'click',
-                                redirect
-                            );
-
-                        };
-
-
-                    modalBtn.addEventListener(
-                        'click',
-                        redirect
-                    );
-
-                }
-            );
 
         }
     );
 
-
-    /* ========================================
-       MENSAJES DE CONSOLA
-    ======================================== */
-
-    console.log(
-        '🖱️ Cursor personalizado activado'
-    );
-
-    console.log(
-        '🎵 Música: se inicia únicamente al pulsar continuar'
-    );
-
-    console.log(
-        '👤 Usuario: admin / 1234'
-    );
-
-    console.log(
-        '📁 Cursor: cursor/mi-cursor.png'
-    );
-
-})();
+});

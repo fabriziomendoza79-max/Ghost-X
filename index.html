@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0b0d15">
-    <title>Ghost X</title>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Ghost X · Panel Pro</title>
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
@@ -16,92 +19,94 @@
 
 <body>
 
-    <!-- ==========================================
+    <!-- =====================================================
+         CURSOR
+    ====================================================== -->
+
+    <div id="customCursor"></div>
+
+
+    <!-- =====================================================
          MÚSICA
-    ========================================== -->
+    ====================================================== -->
+
     <audio id="musica" loop preload="auto">
         <source src="musica.mp3" type="audio/mpeg">
-        Tu navegador no soporta audio HTML5.
     </audio>
 
 
-    <!-- ==========================================
-         CURSOR PERSONALIZADO
-    ========================================== -->
-    <div class="custom-cursor" id="customCursor">
-        <img src="cursor/mi-cursor.png" alt="Cursor" id="cursorImage">
-    </div>
-
-
-    <!-- ==========================================
-         EFECTO DE CLICK
-    ========================================== -->
-    <canvas id="clickCanvas"></canvas>
-
-
-    <!-- ==========================================
+    <!-- =====================================================
          PANTALLA DE BIENVENIDA
-    ========================================== -->
-    <div class="welcome-screen" id="welcomeScreen">
+    ====================================================== -->
 
-        <div class="welcome-background"></div>
+    <div id="welcomeScreen" class="screen welcome-screen">
 
-        <div class="welcome-content">
+        <div class="welcome-box">
 
-            <div class="welcome-logo">
-                <i class="fas fa-shield-halved"></i>
+            <div class="welcome-icon">
+                <i class="fas fa-ghost"></i>
             </div>
 
-            <h1>Ghost X</h1>
+            <h1>
+                GHOST <span>X</span>
+            </h1>
 
-            <p class="welcome-subtitle">
-                Panel de control avanzado
+            <p>
+                Bienvenido a Ghost X · Panel Pro
             </p>
 
-            <div class="welcome-line"></div>
-
-            <button
-                class="welcome-btn"
-                id="continueBtn"
-                type="button">
-
-                <span class="welcome-btn-text">
-                    click aquí para continuar
-                </span>
-
-                <span class="welcome-btn-loader">
-                    <i class="fas fa-spinner fa-spin"></i>
-                </span>
-
+            <button id="continueBtn" class="main-button">
+                <i class="fas fa-arrow-right"></i>
+                CONTINUAR
             </button>
 
-            <p class="welcome-hint">
-                <i class="fas fa-volume-high"></i>
-                La música se activará al continuar
-            </p>
-
         </div>
+
     </div>
 
 
-    <!-- ==========================================
-         PANTALLA DE LOGIN
-    ========================================== -->
-    <div class="login-screen" id="loginScreen">
+    <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+    <div id="loginScreen" class="login-screen">
+
+        <!-- VIDEO ORIGINAL -->
 
         <div class="login-video-bg">
 
-            <video autoplay muted loop playsinline preload="metadata">
-                <source src="videos/mi-video.mp4" type="video/mp4">
-                <source src="videos/mi-video.webm" type="video/webm">
-                <source src="videos/mi-video.ogg" type="video/ogg">
-                Tu navegador no soporta video HTML5.
+            <video
+                id="loginVideo"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+            >
+
+                <source
+                    src="videos/mi-video.mp4"
+                    type="video/mp4"
+                >
+
+                <source
+                    src="videos/mi-video.webm"
+                    type="video/webm"
+                >
+
+                <source
+                    src="videos/mi-video.ogg"
+                    type="video/ogg"
+                >
+
             </video>
 
             <div class="video-overlay-login"></div>
 
         </div>
 
+
+        <!-- CAJA LOGIN -->
 
         <div class="login-container-right">
 
@@ -113,20 +118,21 @@
 
                     <h1>Ghost X</h1>
 
-                    <p>Panel de control avanzado</p>
+                    <p>
+                        Panel de control avanzado
+                    </p>
 
                 </div>
 
 
                 <!-- LOGIN -->
+
                 <div id="loginFormContainer">
 
-                    <h2>
-                        <i class="fas fa-lock"></i>
-                        Iniciar Sesión
-                    </h2>
-
-                    <form class="login-form" id="loginForm">
+                    <form
+                        id="loginForm"
+                        class="login-form"
+                    >
 
                         <div class="input-group">
 
@@ -134,10 +140,11 @@
 
                             <input
                                 type="text"
-                                placeholder="Usuario"
                                 id="usernameInput"
+                                placeholder="Usuario"
                                 autocomplete="username"
-                                required>
+                                required
+                            >
 
                             <span class="input-focus-border"></span>
 
@@ -150,10 +157,11 @@
 
                             <input
                                 type="password"
-                                placeholder="Contraseña"
                                 id="passwordInput"
+                                placeholder="Contraseña"
                                 autocomplete="current-password"
-                                required>
+                                required
+                            >
 
                             <span class="input-focus-border"></span>
 
@@ -162,20 +170,16 @@
 
                         <button
                             type="submit"
+                            id="loginBtn"
                             class="btn-login"
-                            id="loginBtn">
+                        >
 
                             <span class="btn-text">
-                                <i class="fas fa-arrow-right-to-bracket"></i>
-                                Ingresar
-                            </span>
 
-                            <span class="btn-loader">
-                                <i class="fas fa-spinner fa-spin"></i>
-                            </span>
+                                <i class="fas fa-right-to-bracket"></i>
 
-                            <span class="btn-success">
-                                <i class="fas fa-check-circle"></i>
+                                INICIAR SESIÓN
+
                             </span>
 
                         </button>
@@ -185,32 +189,35 @@
 
                     <div class="login-options">
 
-                        <span
-                            class="register-link"
-                            id="showRegister">
-
-                            <i class="fas fa-user-plus"></i>
-
-                            ¿No tienes cuenta?
-                            <strong>Regístrate</strong>
-
+                        <span>
+                            ¿No tienes una cuenta?
                         </span>
+
+                        <button
+                            type="button"
+                            id="showRegister"
+                        >
+                            CREAR CUENTA
+                        </button>
 
                     </div>
 
                 </div>
 
 
-                <!-- REGISTRO -->
-                <div id="registerFormContainer" style="display: none;">
+                <!-- =================================================
+                     REGISTRO
+                ================================================== -->
 
-                    <h2>
-                        <i class="fas fa-user-plus"></i>
-                        Crear Cuenta
-                    </h2>
+                <div
+                    id="registerFormContainer"
+                    style="display:none;"
+                >
 
-
-                    <form class="login-form" id="registerForm">
+                    <form
+                        id="registerForm"
+                        class="login-form"
+                    >
 
                         <div class="input-group">
 
@@ -218,12 +225,10 @@
 
                             <input
                                 type="text"
-                                placeholder="Nombre de usuario"
                                 id="regUsername"
-                                autocomplete="username"
-                                required>
-
-                            <span class="input-focus-border"></span>
+                                placeholder="Usuario"
+                                required
+                            >
 
                         </div>
 
@@ -234,12 +239,10 @@
 
                             <input
                                 type="email"
-                                placeholder="Correo electrónico"
                                 id="regEmail"
-                                autocomplete="email"
-                                required>
-
-                            <span class="input-focus-border"></span>
+                                placeholder="Correo electrónico"
+                                required
+                            >
 
                         </div>
 
@@ -250,12 +253,10 @@
 
                             <input
                                 type="password"
-                                placeholder="Contraseña"
                                 id="regPassword"
-                                autocomplete="new-password"
-                                required>
-
-                            <span class="input-focus-border"></span>
+                                placeholder="Contraseña"
+                                required
+                            >
 
                         </div>
 
@@ -266,39 +267,23 @@
 
                             <input
                                 type="password"
-                                placeholder="Confirmar contraseña"
                                 id="regConfirmPassword"
-                                autocomplete="new-password"
-                                required>
-
-                            <span class="input-focus-border"></span>
+                                placeholder="Confirmar contraseña"
+                                required
+                            >
 
                         </div>
 
 
                         <button
                             type="submit"
+                            id="registerBtn"
                             class="btn-login"
-                            id="registerBtn">
+                        >
 
-                            <span class="btn-text">
+                            <i class="fas fa-user-plus"></i>
 
-                                <i class="fas fa-user-plus"></i>
-                                Registrarse
-
-                            </span>
-
-                            <span class="btn-loader">
-
-                                <i class="fas fa-spinner fa-spin"></i>
-
-                            </span>
-
-                            <span class="btn-success">
-
-                                <i class="fas fa-check-circle"></i>
-
-                            </span>
+                            CREAR CUENTA
 
                         </button>
 
@@ -307,27 +292,21 @@
 
                     <div class="login-options">
 
-                        <span
-                            class="register-link"
-                            id="showLogin">
-
-                            <i class="fas fa-arrow-left"></i>
-
-                            Volver al
-                            <strong>Inicio de Sesión</strong>
-
-                        </span>
+                        <button
+                            type="button"
+                            id="showLogin"
+                        >
+                            VOLVER AL LOGIN
+                        </button>
 
                     </div>
 
                 </div>
 
 
-                <div class="login-footer-text">
+                <div class="login-footer">
 
-                    <span>
-                        © 2026 FiveHack · Todos los derechos reservados
-                    </span>
+                    © 2026 Ghost X · Todos los derechos reservados
 
                 </div>
 
@@ -338,110 +317,401 @@
     </div>
 
 
-    <!-- ==========================================
-         MODAL
-    ========================================== -->
-    <div class="modal-overlay" id="modalOverlay">
+    <!-- =====================================================
+         PANEL PRINCIPAL
+    ====================================================== -->
 
-        <div class="modal-box">
+    <div id="mainPanel" class="main-panel">
 
-            <div class="modal-icon" id="modalIcon">
-                <i class="fas fa-check-circle"></i>
+        <!-- VIDEO DE FONDO -->
+
+        <video
+            class="product-video"
+            autoplay
+            muted
+            loop
+            playsinline
+        >
+
+            <source
+                src="video/product.mp4"
+                type="video/mp4"
+            >
+
+        </video>
+
+        <div class="video-overlay"></div>
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="main-header">
+
+            <div class="brand">
+
+                <i class="fas fa-ghost"></i>
+
+                <span>
+                    GHOST X
+                </span>
+
             </div>
 
-            <h3 class="modal-title" id="modalTitle">
-                ¡Éxito!
-            </h3>
 
-            <p class="modal-message" id="modalMessage">
-                Operación completada correctamente.
-            </p>
+            <div class="user-area">
+
+                <div id="userDisplay">
+                    Usuario
+                </div>
+
+                <button
+                    id="logoutBtn"
+                    class="logout-button"
+                >
+
+                    <i class="fas fa-right-from-bracket"></i>
+
+                    <span>
+                        SALIR
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             NAVEGACIÓN
+        ================================================== -->
+
+        <nav class="store-navigation">
 
             <button
-                class="modal-btn"
-                id="modalBtn">
+                id="homeNavBtn"
+                class="nav-button active"
+            >
 
-                Aceptar
+                <i class="fas fa-house"></i>
+
+                HOME
 
             </button>
 
-        </div>
 
-    </div>
+            <button
+                id="featuresNavBtn"
+                class="nav-button"
+            >
 
+                <i class="fas fa-star"></i>
 
-    <!-- ==========================================
-         PANTALLA DE CARGA
-    ========================================== -->
-    <div class="loading-overlay" id="loadingOverlay">
+                CARACTERÍSTICAS
 
-        <div class="loading-spinner">
-
-            <div class="spinner-circle"></div>
-
-            <p class="loading-text">
-                Ingresando...
-            </p>
-
-        </div>
-
-    </div>
+            </button>
 
 
-    <!-- ==========================================
-         PANEL DE PRODUCTOS
-    ========================================== -->
-    <div class="main-panel" id="mainPanel">
+            <button
+                id="panelNavBtn"
+                class="nav-button"
+            >
 
-        <div class="products-video-bg">
+                <i class="fas fa-gamepad"></i>
 
-            <video autoplay muted loop playsinline preload="metadata">
+                PANEL
 
-                <source src="videos/productos-video.mp4" type="video/mp4">
-                <source src="videos/productos-video.webm" type="video/webm">
-                <source src="videos/productos-video.ogg" type="video/ogg">
-
-                Tu navegador no soporta video HTML5.
-
-            </video>
-
-            <div class="video-overlay-products"></div>
-
-        </div>
+            </button>
 
 
-        <div class="products-overlay">
+            <button
+                id="pricesNavBtn"
+                class="nav-button"
+            >
 
-            <div class="products-container">
+                <i class="fas fa-tags"></i>
+
+                PRECIOS
+
+            </button>
+
+        </nav>
 
 
-                <div class="products-header">
+        <!-- =================================================
+             CONTENIDO
+        ================================================== -->
 
-                    <h2>
-                        <i class="fas fa-store"></i>
-                        Tienda de Hacks
-                    </h2>
+        <main class="store-content">
 
 
-                    <div class="user-info">
+            <!-- =================================================
+                 HOME
+            ================================================== -->
 
-                        <i class="fas fa-user-circle"></i>
+            <section
+                id="homeView"
+                class="store-view active"
+            >
 
-                        <span id="userDisplay">
-                            Usuario
-                        </span>
+                <div class="home-content">
+
+                    <div class="home-image home-image-left">
+
+                        <img
+                            src="home/home 1.jfif"
+                            alt="Ghost X Home 1"
+                        >
+
+                    </div>
+
+
+                    <div class="home-center">
+
+                        <div class="home-badge">
+
+                            <i class="fas fa-bolt"></i>
+
+                            GHOST X · PANEL PRO
+
+                        </div>
+
+
+                        <h1>
+
+                            BIENVENIDO A
+
+                            <span>
+                                GHOST X
+                            </span>
+
+                        </h1>
+
+
+                        <p>
+
+                            Explora nuestro panel, descubre sus
+                            características y revisa los planes
+                            disponibles.
+
+                        </p>
 
 
                         <button
-                            class="btn-logout"
-                            id="logoutBtn">
+                            id="homePanelBtn"
+                            class="home-button"
+                        >
 
-                            <i class="fas fa-sign-out-alt"></i>
-                            Cerrar sesión
+                            <i class="fas fa-gamepad"></i>
+
+                            VER PANEL
 
                         </button>
 
                     </div>
+
+
+                    <div class="home-image home-image-right">
+
+                        <img
+                            src="home/home 2.jpeg"
+                            alt="Ghost X Home 2"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CARACTERÍSTICAS
+            ================================================== -->
+
+            <section
+                id="featuresView"
+                class="store-view"
+            >
+
+                <div class="section-header">
+
+                    <div class="section-tag">
+
+                        <i class="fas fa-star"></i>
+
+                        CARACTERÍSTICAS
+
+                    </div>
+
+                    <h2>
+                        Todo en un solo lugar
+                    </h2>
+
+                    <p>
+                        Conoce las principales características
+                        de Ghost X.
+                    </p>
+
+                </div>
+
+
+                <div class="features-grid">
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fas fa-gauge-high"></i>
+
+                        </div>
+
+                        <h3>
+                            ALTO RENDIMIENTO
+                        </h3>
+
+                        <p>
+                            Interfaz rápida y fluida diseñada
+                            para ofrecer una experiencia cómoda.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fas fa-sliders"></i>
+
+                        </div>
+
+                        <h3>
+                            FÁCIL CONFIGURACIÓN
+                        </h3>
+
+                        <p>
+                            Configura las diferentes opciones
+                            desde un panel sencillo.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fas fa-display"></i>
+
+                        </div>
+
+                        <h3>
+                            PANEL MODERNO
+                        </h3>
+
+                        <p>
+                            Diseño moderno con navegación
+                            rápida entre todas las secciones.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fas fa-bolt"></i>
+
+                        </div>
+
+                        <h3>
+                            ACCESO RÁPIDO
+                        </h3>
+
+                        <p>
+                            Accede rápidamente a tus opciones
+                            desde el menú principal.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fas fa-layer-group"></i>
+
+                        </div>
+
+                        <h3>
+                            VARIAS OPCIONES
+                        </h3>
+
+                        <p>
+                            Diferentes planes y configuraciones
+                            disponibles desde una sola interfaz.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fas fa-mobile-screen"></i>
+
+                        </div>
+
+                        <h3>
+                            DISEÑO RESPONSIVE
+                        </h3>
+
+                        <p>
+                            Adaptado para diferentes tamaños
+                            de pantalla.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PANEL
+            ================================================== -->
+
+            <section
+                id="panelView"
+                class="store-view"
+            >
+
+                <div class="section-header">
+
+                    <div class="section-tag">
+
+                        <i class="fas fa-gamepad"></i>
+
+                        PANEL
+
+                    </div>
+
+                    <h2>
+                        Productos disponibles
+                    </h2>
+
+                    <p>
+                        Selecciona una opción para consultar
+                        los precios.
+                    </p>
 
                 </div>
 
@@ -450,59 +720,52 @@
 
 
                     <!-- PRODUCTO 1 -->
+
                     <div class="product-card">
 
                         <div class="product-image">
 
                             <img
                                 src="img/aimbot.png"
-                                alt="Aimbot Pro">
+                                alt="Ghost X"
+                            >
 
-                            <span class="product-badge">
-                                Top
-                            </span>
+                            <div class="product-badge">
+                                TOP
+                            </div>
 
                         </div>
 
 
-                        <div class="product-body">
+                        <div class="product-info">
 
-                            <h3 class="product-name">
-                                1 DIA
+                            <h3>
+                                GHOST X
                             </h3>
 
-                            <p class="product-description">
-
-                                Con nuestro NUEVO y REVOLUCIONARIO
-                                HACK para GTA V, podrás dominar
-                                Los Santos como nunca antes.
-                                Olvídate de grindear misiones
-                                o de que te eliminen.
-
+                            <p>
+                                Sistema de asistencia
+                                configurable.
                             </p>
 
+                            <div class="product-duration">
 
-                            <div class="product-footer">
+                                <i class="fas fa-clock"></i>
 
-                                <span class="product-price">
-
-                                    <i class="fas fa-coins"></i>
-                                    S/ 9
-
-                                </span>
-
-
-                                <button
-                                    class="btn-buy"
-                                    data-product="Aimbot Pro"
-                                    data-price="9 soles">
-
-                                    <i class="fab fa-whatsapp"></i>
-                                    Comprar
-
-                                </button>
+                                1 DÍA
 
                             </div>
+
+
+                            <button
+                                class="btn-buy go-prices"
+                            >
+
+                                <i class="fas fa-tags"></i>
+
+                                VER PRECIOS
+
+                            </button>
 
                         </div>
 
@@ -510,59 +773,52 @@
 
 
                     <!-- PRODUCTO 2 -->
+
                     <div class="product-card">
 
                         <div class="product-image">
 
                             <img
                                 src="img/wallhack.png"
-                                alt="Wallhack X">
+                                alt="Ghost X"
+                            >
 
-                            <span class="product-badge">
-                                Popular
-                            </span>
+                            <div class="product-badge popular">
+                                POPULAR
+                            </div>
 
                         </div>
 
 
-                        <div class="product-body">
+                        <div class="product-info">
 
-                            <h3 class="product-name">
-                                15 DIAS
+                            <h3>
+                                GHOST X
                             </h3>
 
-                            <p class="product-description">
-
-                                Con nuestro NUEVO y REVOLUCIONARIO
-                                HACK para GTA V, podrás dominar
-                                Los Santos como nunca antes.
-                                Olvídate de grindear misiones
-                                o de que te eliminen.
-
+                            <p>
+                                Herramientas visuales
+                                configurables.
                             </p>
 
+                            <div class="product-duration">
 
-                            <div class="product-footer">
+                                <i class="fas fa-clock"></i>
 
-                                <span class="product-price">
-
-                                    <i class="fas fa-coins"></i>
-                                    S/ 18
-
-                                </span>
-
-
-                                <button
-                                    class="btn-buy"
-                                    data-product="Wallhack X"
-                                    data-price="18 soles">
-
-                                    <i class="fab fa-whatsapp"></i>
-                                    Comprar
-
-                                </button>
+                                15 DÍAS
 
                             </div>
+
+
+                            <button
+                                class="btn-buy go-prices"
+                            >
+
+                                <i class="fas fa-tags"></i>
+
+                                VER PRECIOS
+
+                            </button>
 
                         </div>
 
@@ -570,78 +826,357 @@
 
 
                     <!-- PRODUCTO 3 -->
+
                     <div class="product-card">
 
                         <div class="product-image">
 
                             <img
                                 src="img/godmode.png"
-                                alt="GodMode++">
+                                alt="Ghost X"
+                            >
 
-                            <span class="product-badge">
-                                Élite
-                            </span>
+                            <div class="product-badge elite">
+                                ÉLITE
+                            </div>
 
                         </div>
 
 
-                        <div class="product-body">
+                        <div class="product-info">
 
-                            <h3 class="product-name">
-                                30 DIAS
+                            <h3>
+                                GHOST X
                             </h3>
 
-                            <p class="product-description">
-
-                                Con nuestro NUEVO y REVOLUCIONARIO
-                                HACK para GTA V, podrás dominar
-                                Los Santos como nunca antes.
-                                Olvídate de grindear misiones
-                                o de que te eliminen.
-
+                            <p>
+                                Configuración avanzada
+                                dentro del panel.
                             </p>
 
+                            <div class="product-duration">
 
-                            <div class="product-footer">
+                                <i class="fas fa-clock"></i>
 
-                                <span class="product-price">
-
-                                    <i class="fas fa-coins"></i>
-                                    S/ 30
-
-                                </span>
-
-
-                                <button
-                                    class="btn-buy"
-                                    data-product="GodMode++"
-                                    data-price="30 soles">
-
-                                    <i class="fab fa-whatsapp"></i>
-                                    Comprar
-
-                                </button>
+                                30 DÍAS
 
                             </div>
+
+
+                            <button
+                                class="btn-buy go-prices"
+                            >
+
+                                <i class="fas fa-tags"></i>
+
+                                VER PRECIOS
+
+                            </button>
 
                         </div>
 
                     </div>
 
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PRECIOS
+            ================================================== -->
+
+            <section
+                id="pricesView"
+                class="store-view"
+            >
+
+                <div class="section-header">
+
+                    <div class="section-tag">
+
+                        <i class="fas fa-tags"></i>
+
+                        PRECIOS
+
+                    </div>
+
+                    <h2>
+                        Elige tu plan
+                    </h2>
+
+                    <p>
+                        Selecciona el plan que prefieras.
+                    </p>
 
                 </div>
 
+
+                <div class="prices-grid">
+
+
+                    <!-- 1 DÍA -->
+
+                    <div class="price-card">
+
+                        <div class="price-icon">
+
+                            <i class="fas fa-bolt"></i>
+
+                        </div>
+
+                        <h3>
+                            1 DÍA
+                        </h3>
+
+                        <div class="price">
+
+                            <small>S/</small>
+
+                            9
+
+                        </div>
+
+                        <div class="price-line"></div>
+
+                        <ul>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Acceso por 1 día
+                            </li>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Activación rápida
+                            </li>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Soporte
+                            </li>
+
+                        </ul>
+
+
+                        <button
+                            class="btn-buy buy-price"
+                            data-product="1 DÍA"
+                            data-price="9"
+                        >
+
+                            <i class="fas fa-cart-shopping"></i>
+
+                            COMPRAR
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- 15 DÍAS -->
+
+                    <div class="price-card featured">
+
+                        <div class="featured-label">
+                            POPULAR
+                        </div>
+
+
+                        <div class="price-icon">
+
+                            <i class="fas fa-fire"></i>
+
+                        </div>
+
+                        <h3>
+                            15 DÍAS
+                        </h3>
+
+                        <div class="price">
+
+                            <small>S/</small>
+
+                            18
+
+                        </div>
+
+                        <div class="price-line"></div>
+
+                        <ul>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Acceso por 15 días
+                            </li>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Activación rápida
+                            </li>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Soporte
+                            </li>
+
+                        </ul>
+
+
+                        <button
+                            class="btn-buy buy-price"
+                            data-product="15 DÍAS"
+                            data-price="18"
+                        >
+
+                            <i class="fas fa-cart-shopping"></i>
+
+                            COMPRAR
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- 30 DÍAS -->
+
+                    <div class="price-card">
+
+                        <div class="price-icon">
+
+                            <i class="fas fa-crown"></i>
+
+                        </div>
+
+                        <h3>
+                            30 DÍAS
+                        </h3>
+
+                        <div class="price">
+
+                            <small>S/</small>
+
+                            30
+
+                        </div>
+
+                        <div class="price-line"></div>
+
+                        <ul>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Acceso por 30 días
+                            </li>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Activación rápida
+                            </li>
+
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Soporte
+                            </li>
+
+                        </ul>
+
+
+                        <button
+                            class="btn-buy buy-price"
+                            data-product="30 DÍAS"
+                            data-price="30"
+                        >
+
+                            <i class="fas fa-cart-shopping"></i>
+
+                            COMPRAR
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL
+    ====================================================== -->
+
+    <div
+        id="modal"
+        class="modal"
+    >
+
+        <div class="modal-box">
+
+            <button
+                id="closeModal"
+                class="close-modal"
+            >
+
+                <i class="fas fa-xmark"></i>
+
+            </button>
+
+
+            <div class="modal-icon">
+
+                <i class="fas fa-circle-info"></i>
+
             </div>
+
+
+            <h3 id="modalTitle">
+                Aviso
+            </h3>
+
+
+            <p id="modalMessage">
+                Mensaje
+            </p>
+
+
+            <button
+                id="modalButton"
+                class="main-button"
+            >
+                ACEPTAR
+            </button>
 
         </div>
 
     </div>
 
 
-    <!-- ==========================================
-         JAVASCRIPT
-    ========================================== -->
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+        id="loadingOverlay"
+        class="loading-overlay"
+    >
+
+        <div class="loader"></div>
+
+        <p>
+            CARGANDO GHOST X...
+        </p>
+
+    </div>
+
+
+    <!-- JS -->
+
     <script src="script.js"></script>
 
 </body>
+
 </html>
