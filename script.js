@@ -1560,13 +1560,29 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
         try {
 
             const {
-                data: {
-                    session
+                data: { user },
+                error: errorUsuario
+            } = await supabaseClient.auth.getUser();
+
+
+            if (errorUsuario || !user) {
+
+                /*
+                    Si la sesión ya no es válida
+                    (usuario borrado o expirado),
+                    se cierra y se pide registrarse.
+                */
+
+                try {
+
+                    await supabaseClient.auth.signOut();
+
+                } catch (ignored) {
+
+                    /* no importa */
+
                 }
-            } = await supabaseClient.auth.getSession();
 
-
-            if (!session) {
                 return;
             }
 
@@ -1581,7 +1597,7 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                 } = await supabaseClient
                     .from("profiles")
                     .select("username")
-                    .eq("id", session.user.id)
+                    .eq("id", user.id)
                     .maybeSingle();
 
 
@@ -1604,12 +1620,12 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
             if (
                 !username &&
-                session.user.user_metadata &&
-                session.user.user_metadata.username
+                user.user_metadata &&
+                user.user_metadata.username
             ) {
 
                 username =
-                    session.user.user_metadata.username;
+                    user.user_metadata.username;
 
             }
 
