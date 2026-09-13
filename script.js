@@ -1041,6 +1041,13 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
         }
 
 
+        if (window.__lluviaSangre) {
+
+            window.__lluviaSangre.mostrar();
+
+        }
+
+
         if (userDisplay) {
 
             userDisplay.textContent =
@@ -1372,6 +1379,17 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                         }
 
 
+                        if (
+                            window.__lluviaSangre
+                        ) {
+
+                            window
+                                .__lluviaSangre
+                                .ocultar();
+
+                        }
+
+
                         if (loginScreen) {
 
                             loginScreen.style.display =
@@ -1649,6 +1667,212 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
     }
 
+
+    /* =====================================================
+       LLUVIA DE SANGRE (FONDO)
+    ====================================================== */
+
+    function crearLluviaDeSangre() {
+
+        const canvas = document.createElement("canvas");
+        canvas.id = "bloodRainCanvas";
+
+        const estilo = canvas.style;
+        estilo.position = "fixed";
+        estilo.inset = "0";
+        estilo.width = "100%";
+        estilo.height = "100%";
+        estilo.pointerEvents = "none";
+        estilo.zIndex = "2";
+        estilo.display = "none";
+
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext("2d");
+
+        let ancho = 0;
+        let alto = 0;
+
+        function redimensionar() {
+
+            ancho = window.innerWidth;
+            alto = window.innerHeight;
+
+            canvas.width =
+                ancho * devicePixelRatio;
+
+            canvas.height =
+                alto * devicePixelRatio;
+
+            ctx.setTransform(
+                devicePixelRatio,
+                0,
+                0,
+                devicePixelRatio,
+                0,
+                0
+            );
+
+        }
+
+        redimensionar();
+
+        window.addEventListener(
+            "resize",
+            redimensionar
+        );
+
+        const gotas = [];
+
+        function nuevaGota(aleatoria) {
+
+            return {
+
+                x: Math.random() * ancho,
+
+                y: aleatoria
+                    ? -30 - Math.random() * 120
+                    : Math.random() * alto,
+
+                vel: 2 + Math.random() * 3,
+
+                largo: 14 + Math.random() * 30,
+
+                ancho: 1 + Math.random() * 2,
+
+                fase: Math.random() * Math.PI * 2,
+
+                velFase:
+                    0.01 + Math.random() * 0.03,
+
+                alpha:
+                    0.2 + Math.random() * 0.45
+
+            };
+
+        }
+
+        for (let i = 0; i < 45; i++) {
+
+            gotas.push(nuevaGota(false));
+
+        }
+
+        let enAnimacion = false;
+
+        function animar() {
+
+            ctx.clearRect(0, 0, ancho, alto);
+
+            for (const gota of gotas) {
+
+                gota.y += gota.vel;
+                gota.fase += gota.velFase;
+
+                const sway =
+                    Math.sin(gota.fase) * 3;
+
+                const finX =
+                    gota.x + sway;
+
+                const finY =
+                    gota.y + gota.largo;
+
+
+                if (finY > alto + 60) {
+
+                    Object.assign(
+                        gota,
+                        nuevaGota(true)
+                    );
+
+                }
+
+
+                const gradiente =
+                    ctx.createLinearGradient(
+                        gota.x,
+                        gota.y,
+                        finX,
+                        finY
+                    );
+
+                gradiente.addColorStop(
+                    0,
+                    `rgba(207, 15, 15, ${gota.alpha})`
+                );
+
+                gradiente.addColorStop(
+                    1,
+                    `rgba(110, 5, 5, ${gota.alpha})`
+                );
+
+
+                ctx.strokeStyle = gradiente;
+
+                ctx.lineWidth = gota.ancho;
+
+                ctx.lineCap = "round";
+
+                ctx.beginPath();
+
+                ctx.moveTo(gota.x, gota.y);
+
+                ctx.lineTo(finX, finY);
+
+                ctx.stroke();
+
+
+                ctx.fillStyle =
+                    `rgba(230, 30, 30, ${gota.alpha})`;
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    finX,
+                    finY,
+                    gota.ancho * 1.8,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+
+            requestAnimationFrame(animar);
+
+        }
+
+
+        window.__lluviaSangre = {
+
+            mostrar() {
+
+                canvas.style.display = "block";
+
+                if (!enAnimacion) {
+
+                    enAnimacion = true;
+
+                    animar();
+
+                }
+
+            },
+
+            ocultar() {
+
+                canvas.style.display = "none";
+
+            }
+
+        };
+
+    }
+
+
+    crearLluviaDeSangre();
 
     comprobarSesion();
 

@@ -24,7 +24,9 @@ body {
     background: #050509;
     color: #ffffff;
 
-    cursor: auto;
+    cursor:
+        url("cursor/mi-cursor-32.png") 17 4,
+        auto;
 }
 
 button,
@@ -33,7 +35,9 @@ input {
 }
 
 button {
-    cursor: pointer;
+    cursor:
+        url("cursor/mi-cursor-32.png") 17 4,
+        pointer;
 }
 
 
