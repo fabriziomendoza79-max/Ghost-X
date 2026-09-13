@@ -249,6 +249,115 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
 
     /* =====================================================
+       TABLA PROFILES (AUTO-DETECCIÓN)
+       Si la tabla no existe, NO se vuelve a consultar
+       para evitar errores y retardos.
+    ====================================================== */
+
+    let tablaProfilesDisponible =
+        null;
+
+
+    function esErrorDeTablaFaltante(error) {
+
+        const mensaje =
+            String(
+                (error && error.message) ||
+                (error && error.code) ||
+                error ||
+                ""
+            );
+
+        return (
+            /PGRST205|could not find the table/i.test(
+                mensaje
+            )
+        );
+
+    }
+
+
+    async function datosPerfil(consulta) {
+
+        if (
+            tablaProfilesDisponible ===
+            false
+        ) {
+
+            return null;
+
+        }
+
+        try {
+
+            const resultado =
+                await consulta();
+
+            const error =
+                resultado.error;
+
+            const data =
+                resultado.data;
+
+
+            if (error) {
+
+                if (
+                    esErrorDeTablaFaltante(
+                        error
+                    )
+                ) {
+
+                    tablaProfilesDisponible =
+                        false;
+
+                } else {
+
+                    console.error(
+                        "Error consultando perfil:",
+                        error
+                    );
+
+                }
+
+                return null;
+
+            }
+
+
+            tablaProfilesDisponible =
+                true;
+
+            return data;
+
+        } catch (error) {
+
+            if (
+                esErrorDeTablaFaltante(
+                    error
+                )
+            ) {
+
+                tablaProfilesDisponible =
+                    false;
+
+            } else {
+
+                console.error(
+                    "Error consultando perfil:",
+                    error
+                );
+
+            }
+
+            return null;
+
+        }
+
+    }
+
+
+    /* =====================================================
        INSERTAR PERFIL (NO BLOQUEAR LA ENTRADA)
     ====================================================== */
 
@@ -257,6 +366,15 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
         username,
         email
     ) {
+
+        if (
+            tablaProfilesDisponible ===
+            false
+        ) {
+
+            return;
+
+        }
 
         try {
 
@@ -277,19 +395,50 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
             if (error) {
 
+                if (
+                    esErrorDeTablaFaltante(
+                        error
+                    )
+                ) {
+
+                    tablaProfilesDisponible =
+                        false;
+
+                } else {
+
+                    console.error(
+                        "Error creando perfil:",
+                        error
+                    );
+
+                }
+
+            } else {
+
+                tablaProfilesDisponible =
+                    true;
+
+            }
+
+        } catch (error) {
+
+            if (
+                esErrorDeTablaFaltante(
+                    error
+                )
+            ) {
+
+                tablaProfilesDisponible =
+                    false;
+
+            } else {
+
                 console.error(
                     "Error creando perfil:",
                     error
                 );
 
             }
-
-        } catch (error) {
-
-            console.error(
-                "Error creando perfil:",
-                error
-            );
 
         }
 
@@ -584,40 +733,21 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
                     let usuarioExiste = false;
 
-                    try {
-
-                        const {
-                            data: existingProfile,
-                            error: profileError
-                        } = await supabaseClient
-                            .from("profiles")
-                            .select("id")
-                            .eq("username", username)
-                            .maybeSingle();
-
-
-                        if (profileError) {
-
-                            console.error(
-                                "Error comprobando usuario:",
-                                profileError
-                            );
-
-                        }
-
-
-                        if (existingProfile) {
-
-                            usuarioExiste = true;
-
-                        }
-
-                    } catch (error) {
-
-                        console.error(
-                            "Error comprobando el usuario:",
-                            error
+                    const existingProfile =
+                        await datosPerfil(
+                            () =>
+                                supabaseClient
+                                    .from("profiles")
+                                    .select("id")
+                                    .eq("username", username)
+                                    .maybeSingle()
                         );
+
+
+                    if (existingProfile) {
+
+                        usuarioExiste =
+                            true;
 
                     }
 
@@ -703,28 +833,11 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                                     loginData.user
                                 ) {
 
-                                    try {
-
-                                        await supabaseClient
-                                            .from("profiles")
-                                            .insert({
-
-                                                id: loginData.user.id,
-
-                                                username: username,
-
-                                                email: email
-
-                                            });
-
-                                    } catch (perfilError) {
-
-                                        console.error(
-                                            "Error creando perfil:",
-                                            perfilError
-                                        );
-
-                                    }
+                                    intentarInsertarPerfil(
+                                        loginData.user.id,
+                                        username,
+                                        email
+                                    );
 
                                 }
 
@@ -905,40 +1018,21 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
                     } else {
 
-                        try {
-
-                            const {
-                                data: profile,
-                                error: profileError
-                            } = await supabaseClient
-                                .from("profiles")
-                                .select("email, username")
-                                .eq("username", username)
-                                .maybeSingle();
-
-
-                            if (profileError) {
-
-                                console.error(
-                                    "Error buscando usuario:",
-                                    profileError
-                                );
-
-                            }
-
-
-                            if (profile) {
-
-                                emailCuenta = profile.email;
-
-                            }
-
-                        } catch (error) {
-
-                            console.error(
-                                "Error consultando la cuenta:",
-                                error
+                        const profile =
+                            await datosPerfil(
+                                () =>
+                                    supabaseClient
+                                        .from("profiles")
+                                        .select("email")
+                                        .eq("username", username)
+                                        .maybeSingle()
                             );
+
+
+                        if (profile) {
+
+                            emailCuenta =
+                                profile.email;
 
                         }
 
@@ -1660,30 +1754,22 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
             let username =
                 null;
 
-            try {
 
-                const {
-                    data: profile
-                } = await supabaseClient
-                    .from("profiles")
-                    .select("username")
-                    .eq("id", user.id)
-                    .maybeSingle();
-
-
-                if (profile) {
-
-                    username =
-                        profile.username;
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Error consultando el perfil:",
-                    error
+            const profile =
+                await datosPerfil(
+                    () =>
+                        supabaseClient
+                            .from("profiles")
+                            .select("username")
+                            .eq("id", user.id)
+                            .maybeSingle()
                 );
+
+
+            if (profile) {
+
+                username =
+                    profile.username;
 
             }
 

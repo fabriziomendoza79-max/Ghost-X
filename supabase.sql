@@ -1,26 +1,19 @@
 -- =========================================================
---  GHOST X · SUPA BASE (ejecutar en: Supabase > SQL Editor)
---  Permite que el USUARIO funcione en cualquier navegador.
---  Solo se ejecuta UNA vez.
+--  GHOST X · SUPABASE (ejecutar UNA vez en: Supabase > SQL Editor)
+--  Hace que el USUARIO funcione en cualquier navegador.
 -- =========================================================
 
 create table if not exists public.profiles (
   id uuid references auth.users on delete cascade not null primary key,
   username text unique not null,
-  email text,
-  created_at timestamptz default now()
+  email text
 );
 
 alter table public.profiles enable row level security;
 
-drop policy if exists "perfiles visibles" on public.profiles;
-create policy "perfiles visibles" on public.profiles for select using (true);
+create policy "leer perfiles" on public.profiles for select using (true);
 
-drop policy if exists "usuario crea su perfil" on public.profiles;
-create policy "usuario crea su perfil" on public.profiles for insert with check (auth.uid() = id);
-
-drop policy if exists "usuario actualiza su perfil" on public.profiles;
-create policy "usuario actualiza su perfil" on public.profiles for update using (auth.uid() = id);
+create policy "crear perfil" on public.profiles for insert with check (auth.uid() = id);
 
 -- Crea el perfil automaticamente cuando alguien se registra
 create or replace function public.handle_new_user()
