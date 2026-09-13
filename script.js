@@ -249,6 +249,54 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
 
     /* =====================================================
+       INSERTAR PERFIL (NO BLOQUEAR LA ENTRADA)
+    ====================================================== */
+
+    async function intentarInsertarPerfil(
+        idUsuario,
+        username,
+        email
+    ) {
+
+        try {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("profiles")
+                .insert({
+
+                    id: idUsuario,
+
+                    username: username,
+
+                    email: email
+
+                });
+
+
+            if (error) {
+
+                console.error(
+                    "Error creando perfil:",
+                    error
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Error creando perfil:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
        CONTINUAR
     ====================================================== */
 
@@ -724,35 +772,11 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
                     if (data.user) {
 
-                        const {
-                            error: insertError
-                        } = await supabaseClient
-                            .from("profiles")
-                            .insert({
-
-                                id: data.user.id,
-
-                                username: username,
-
-                                email: email
-
-                            });
-
-
-                        if (insertError) {
-
-                            console.error(
-                                "Error creando perfil:",
-                                insertError
-                            );
-
-                            /*
-                                Si el correo requiere confirmación,
-                                el usuario puede necesitar confirmar
-                                su correo antes de iniciar sesión.
-                            */
-
-                        }
+                        intentarInsertarPerfil(
+                            data.user.id,
+                            username,
+                            email
+                        );
 
                     }
 
@@ -1446,7 +1470,7 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                         */
 
                     },
-                    500
+                    250
                 );
 
             }
