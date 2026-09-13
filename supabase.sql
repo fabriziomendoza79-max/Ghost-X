@@ -11,6 +11,10 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+grant select, insert, update on public.profiles to anon;
+
+grant select, insert, update on public.profiles to authenticated;
+
 create policy "leer perfiles" on public.profiles for select using (true);
 
 create policy "crear perfil" on public.profiles for insert with check (auth.uid() = id);
