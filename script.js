@@ -1,6 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =====================================================
+       SUPABASE
+    ====================================================== */
+const SUPABASE_URL = "https://vumpklurbsybsiimivjx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+    /* =====================================================
        ELEMENTOS
     ====================================================== */
 
@@ -66,15 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       USUARIOS
-    ====================================================== */
-
-    const users = {
-        admin: "1234"
-    };
-
-
-    /* =====================================================
        MÚSICA
     ====================================================== */
 
@@ -83,6 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function iniciarMusica() {
 
         if (!musica) {
+            return;
+        }
+
+        if (musicaIniciada) {
             return;
         }
 
@@ -97,12 +104,11 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(() => {
 
                 /*
-                   El navegador puede bloquear el audio
-                   hasta que exista una interacción.
+                    El navegador puede bloquear el audio
+                    hasta que exista una interacción.
                 */
 
             });
-
     }
 
 
@@ -121,13 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 customCursor.style.top =
                     event.clientY + "px";
-
             }
-
-            /*
-               Intentamos activar la música al mover
-               el cursor.
-            */
 
             if (!musicaIniciada) {
                 iniciarMusica();
@@ -172,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         modal.style.display = "flex";
-
     }
 
 
@@ -212,9 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
             (event) => {
 
                 if (event.target === modal) {
-
                     closeModalWindow();
-
                 }
 
             }
@@ -354,26 +351,81 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       REGISTRO
+       RESGUARDO LOCAL DE CUENTAS
+    ====================================================== */
+
+    const accountsKey = "ghostx_accounts";
+
+    function guardarCuentaLocal(username, email) {
+
+        try {
+
+            const stored = JSON.parse(
+                localStorage.getItem(accountsKey) || "{}"
+            );
+
+            stored[username] = email;
+
+            localStorage.setItem(
+                accountsKey,
+                JSON.stringify(stored)
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Error guardando cuenta local:",
+                error
+            );
+
+        }
+
+    }
+
+    function obtenerCorreoLocal(username) {
+
+        try {
+
+            const stored = JSON.parse(
+                localStorage.getItem(accountsKey) || "{}"
+            );
+
+            return stored[username] || null;
+
+        } catch (error) {
+
+            console.error(
+                "Error leyendo cuenta local:",
+                error
+            );
+
+            return null;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       REGISTRO CON SUPABASE
     ====================================================== */
 
     if (registerForm) {
 
         registerForm.addEventListener(
             "submit",
-            (event) => {
+            async (event) => {
 
                 event.preventDefault();
 
                 const usernameInput =
-                    document.getElementById(
-                        "regUsername"
-                    );
+                    document.getElementById("regUsername");
+
+                const emailInput =
+                    document.getElementById("regEmail");
 
                 const passwordInput =
-                    document.getElementById(
-                        "regPassword"
-                    );
+                    document.getElementById("regPassword");
 
                 const confirmInput =
                     document.getElementById(
@@ -384,6 +436,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const username =
                     usernameInput
                         ? usernameInput.value.trim()
+                        : "";
+
+                const email =
+                    emailInput
+                        ? emailInput.value.trim()
                         : "";
 
                 const password =
@@ -397,6 +454,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         : "";
 
 
+                /* =================================================
+                   VALIDACIONES
+                ================================================== */
+
                 if (username.length < 3) {
 
                     showModal(
@@ -408,11 +469,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                if (password.length < 4) {
+                if (!email || !email.includes("@")) {
+
+                    showModal(
+                        "CORREO INVÁLIDO",
+                        "Introduce un correo electrónico válido."
+                    );
+
+                    return;
+                }
+
+
+                if (password.length < 6) {
 
                     showModal(
                         "CONTRASEÑA INVÁLIDA",
-                        "La contraseña debe tener al menos 4 caracteres."
+                        "La contraseña debe tener al menos 6 caracteres."
                     );
 
                     return;
@@ -430,53 +502,242 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                if (users[username]) {
+                showLoading();
+
+
+                try {
+
+                    /* =================================================
+                       COMPROBAR USERNAME
+                    ================================================== */
+
+                    let usuarioExiste = false;
+
+                    try {
+
+                        const {
+                            data: existingProfile,
+                            error: profileError
+                        } = await supabaseClient
+                            .from("profiles")
+                            .select("id")
+                            .eq("username", username)
+                            .maybeSingle();
+
+
+                        if (profileError) {
+
+                            console.error(
+                                "Error comprobando usuario:",
+                                profileError
+                            );
+
+                        }
+
+
+                        if (existingProfile) {
+
+                            usuarioExiste = true;
+
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Error comprobando el usuario:",
+                            error
+                        );
+
+                    }
+
+
+                    if (
+                        !usuarioExiste &&
+                        obtenerCorreoLocal(username)
+                    ) {
+
+                        usuarioExiste = true;
+
+                    }
+
+
+                    if (usuarioExiste) {
+
+                        hideLoading();
+
+                        showModal(
+                            "USUARIO EXISTENTE",
+                            "Ese usuario ya está registrado."
+                        );
+
+                        return;
+                    }
+
+
+                    /* =================================================
+                       CREAR CUENTA
+                    ================================================== */
+
+                    const {
+                        data,
+                        error
+                    } = await supabaseClient.auth.signUp({
+
+                        email: email,
+
+                        password: password,
+
+                        options: {
+                            data: {
+                                username: username
+                            }
+                        }
+
+                    });
+
+
+                    if (error) {
+
+                        console.error(
+                            "Error registrando:",
+                            error
+                        );
+
+                        hideLoading();
+
+                        let mensaje =
+                            "No se pudo crear la cuenta.";
+
+                        if (
+                            error.message
+                                .toLowerCase()
+                                .includes("already registered")
+                        ) {
+
+                            mensaje =
+                                "Ese correo ya está registrado.";
+
+                        }
+
+                        showModal(
+                            "ERROR DE REGISTRO",
+                            mensaje
+                        );
+
+                        return;
+                    }
+
+
+                    /* =================================================
+                       GUARDAR PERFIL
+                    ================================================== */
+
+                    if (data.user) {
+
+                        const {
+                            error: insertError
+                        } = await supabaseClient
+                            .from("profiles")
+                            .insert({
+
+                                id: data.user.id,
+
+                                username: username,
+
+                                email: email
+
+                            });
+
+
+                        if (insertError) {
+
+                            console.error(
+                                "Error creando perfil:",
+                                insertError
+                            );
+
+                            /*
+                                Si el correo requiere confirmación,
+                                el usuario puede necesitar confirmar
+                                su correo antes de iniciar sesión.
+                            */
+
+                        }
+
+                    }
+
+
+                    if (data.user) {
+
+                        guardarCuentaLocal(
+                            username,
+                            email
+                        );
+
+                    }
+
+
+                    hideLoading();
+
+
+                    /* =================================================
+                       LIMPIAR CAMPOS
+                    ================================================== */
+
+                    if (usernameInput) {
+                        usernameInput.value = "";
+                    }
+
+                    if (emailInput) {
+                        emailInput.value = "";
+                    }
+
+                    if (passwordInput) {
+                        passwordInput.value = "";
+                    }
+
+                    if (confirmInput) {
+                        confirmInput.value = "";
+                    }
+
+
+                    if (registerFormContainer) {
+
+                        registerFormContainer.style.display =
+                            "none";
+
+                    }
+
+
+                    if (loginFormContainer) {
+
+                        loginFormContainer.style.display =
+                            "block";
+
+                    }
+
 
                     showModal(
-                        "USUARIO EXISTENTE",
-                        "Ese usuario ya está registrado."
+                        "CUENTA CREADA",
+                        "Tu cuenta fue creada correctamente. Ahora puedes iniciar sesión."
                     );
 
-                    return;
-                }
 
+                } catch (error) {
 
-                users[username] =
-                    password;
+                    console.error(
+                        "Error inesperado:",
+                        error
+                    );
 
+                    hideLoading();
 
-                if (usernameInput) {
-                    usernameInput.value = "";
-                }
-
-                if (passwordInput) {
-                    passwordInput.value = "";
-                }
-
-                if (confirmInput) {
-                    confirmInput.value = "";
-                }
-
-
-                if (registerFormContainer) {
-
-                    registerFormContainer.style.display =
-                        "none";
+                    showModal(
+                        "ERROR",
+                        "Ocurrió un error al crear la cuenta."
+                    );
 
                 }
-
-                if (loginFormContainer) {
-
-                    loginFormContainer.style.display =
-                        "block";
-
-                }
-
-
-                showModal(
-                    "CUENTA CREADA",
-                    "Tu cuenta fue creada correctamente. Ahora puedes iniciar sesión."
-                );
 
             }
         );
@@ -485,16 +746,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       LOGIN
+       LOGIN CON SUPABASE
     ====================================================== */
 
     if (loginForm) {
 
         loginForm.addEventListener(
             "submit",
-            (event) => {
+            async (event) => {
 
                 event.preventDefault();
+
 
                 const usernameInput =
                     document.getElementById(
@@ -518,33 +780,146 @@ document.addEventListener("DOMContentLoaded", () => {
                         : "";
 
 
-                if (
-                    users[username] &&
-                    users[username] === password
-                ) {
+                if (!username || !password) {
 
-                    showLoading();
+                    showModal(
+                        "DATOS INCOMPLETOS",
+                        "Introduce tu usuario y contraseña."
+                    );
+
+                    return;
+                }
 
 
-                    setTimeout(
-                        () => {
+                showLoading();
 
-                            hideLoading();
 
-                            openPanel(
+                try {
+
+                    /* =================================================
+                       BUSCAR USUARIO POR USERNAME
+                    ================================================== */
+
+                    let emailCuenta = null;
+
+                    try {
+
+                        const {
+                            data: profile,
+                            error: profileError
+                        } = await supabaseClient
+                            .from("profiles")
+                            .select("email, username")
+                            .eq("username", username)
+                            .maybeSingle();
+
+
+                        if (profileError) {
+
+                            console.error(
+                                "Error buscando usuario:",
+                                profileError
+                            );
+
+                        }
+
+
+                        if (profile) {
+
+                            emailCuenta = profile.email;
+
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Error consultando la cuenta:",
+                            error
+                        );
+
+                    }
+
+
+                    if (!emailCuenta) {
+
+                        emailCuenta =
+                            obtenerCorreoLocal(
                                 username
                             );
 
-                        },
-                        700
+                    }
+
+
+                    if (!emailCuenta) {
+
+                        hideLoading();
+
+                        showModal(
+                            "DATOS INCORRECTOS",
+                            "El usuario o la contraseña no son correctos."
+                        );
+
+                        return;
+                    }
+
+
+                    /* =================================================
+                       INICIAR SESIÓN
+                    ================================================== */
+
+                    const {
+                        data,
+                        error
+                    } = await supabaseClient.auth.signInWithPassword({
+
+                        email: emailCuenta,
+
+                        password: password
+
+                    });
+
+
+                    if (error) {
+
+                        console.error(
+                            "Error iniciando sesión:",
+                            error
+                        );
+
+                        hideLoading();
+
+                        showModal(
+                            "DATOS INCORRECTOS",
+                            "El usuario o la contraseña no son correctos."
+                        );
+
+                        return;
+                    }
+
+
+                    /* =================================================
+                       ENTRAR AL PANEL
+                    ================================================== */
+
+                    hideLoading();
+
+                    openPanel(
+                        username
                     );
 
 
-                } else {
+                } catch (error) {
+
+                    console.error(
+                        "Error inesperado:",
+                        error
+                    );
+
+                    hideLoading();
 
                     showModal(
-                        "DATOS INCORRECTOS",
-                        "El usuario o la contraseña no son correctos."
+                        "ERROR",
+                        "Ocurrió un error al iniciar sesión."
                     );
 
                 }
@@ -568,12 +943,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
+
         if (loginScreen) {
 
             loginScreen.style.display =
                 "none";
 
         }
+
 
         if (mainPanel) {
 
@@ -591,9 +968,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        showStoreView(
-            "home"
-        );
+        showStoreView("home");
 
     }
 
@@ -735,9 +1110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             () => {
 
-                showStoreView(
-                    "home"
-                );
+                showStoreView("home");
 
             }
         );
@@ -751,9 +1124,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             () => {
 
-                showStoreView(
-                    "features"
-                );
+                showStoreView("features");
 
             }
         );
@@ -767,9 +1138,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             () => {
 
-                showStoreView(
-                    "panel"
-                );
+                showStoreView("panel");
 
             }
         );
@@ -783,9 +1152,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             () => {
 
-                showStoreView(
-                    "prices"
-                );
+                showStoreView("prices");
 
             }
         );
@@ -802,15 +1169,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "homePanelBtn"
         );
 
+
     if (homePanelBtn) {
 
         homePanelBtn.addEventListener(
             "click",
             () => {
 
-                showStoreView(
-                    "panel"
-                );
+                showStoreView("panel");
 
             }
         );
@@ -831,9 +1197,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "click",
                     () => {
 
-                        showStoreView(
-                            "prices"
-                        );
+                        showStoreView("prices");
 
                     }
                 );
@@ -887,16 +1251,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       CERRAR SESIÓN
+       CERRAR SESIÓN CON SUPABASE
     ====================================================== */
 
     if (logoutBtn) {
 
         logoutBtn.addEventListener(
             "click",
-            () => {
+            async () => {
 
                 showLoading();
+
+
+                try {
+
+                    await supabaseClient.auth.signOut();
+
+                } catch (error) {
+
+                    console.error(
+                        "Error cerrando sesión:",
+                        error
+                    );
+
+                }
 
 
                 setTimeout(
@@ -955,12 +1333,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         }
 
+
                         if (passwordInput) {
 
                             passwordInput.value =
                                 "";
 
                         }
+
+
+                        /*
+                            La música NO se detiene.
+                        */
 
                     },
                     500
@@ -1025,6 +1409,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     Math.PI *
                     2;
 
+
                 const distance =
                     20 +
                     Math.random() *
@@ -1083,5 +1468,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
     );
+
+
+    /* =====================================================
+       COMPROBAR SESIÓN ACTUAL
+    ====================================================== */
+
+    async function comprobarSesion() {
+
+        try {
+
+            const {
+                data: {
+                    session
+                }
+            } = await supabaseClient.auth.getSession();
+
+
+            if (!session) {
+                return;
+            }
+
+
+            let username =
+                null;
+
+            try {
+
+                const {
+                    data: profile
+                } = await supabaseClient
+                    .from("profiles")
+                    .select("username")
+                    .eq("id", session.user.id)
+                    .maybeSingle();
+
+
+                if (profile) {
+
+                    username =
+                        profile.username;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Error consultando el perfil:",
+                    error
+                );
+
+            }
+
+
+            if (
+                !username &&
+                session.user.user_metadata &&
+                session.user.user_metadata.username
+            ) {
+
+                username =
+                    session.user.user_metadata.username;
+
+            }
+
+
+            if (username) {
+
+                openPanel(
+                    username
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Error comprobando sesión:",
+                error
+            );
+
+        }
+
+    }
+
+
+    comprobarSesion();
+
 
 });

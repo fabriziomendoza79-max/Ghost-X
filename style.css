@@ -86,7 +86,7 @@ button {
     background:
         radial-gradient(
             circle at center,
-            rgba(115, 60, 220, 0.18),
+            rgba(239, 68, 68, 0.18),
             transparent 45%
         ),
         #050509;
@@ -109,11 +109,11 @@ button {
         );
 
     border: 1px solid
-        rgba(139, 92, 246, 0.35);
+        rgba(239, 68, 68, 0.35);
 
     box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.65),
-        0 0 45px rgba(139, 92, 246, 0.1);
+        0 0 45px rgba(239, 68, 68, 0.1);
 
     backdrop-filter: blur(20px);
 }
@@ -131,19 +131,19 @@ button {
     border-radius: 22px;
 
     background:
-        rgba(139, 92, 246, 0.12);
+        rgba(239, 68, 68, 0.12);
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.35);
+        rgba(239, 68, 68, 0.35);
 
-    color: #a78bfa;
+    color: #f87171;
 
     font-size: 35px;
 
     box-shadow:
         0 0 30px
-        rgba(139, 92, 246, 0.18);
+        rgba(239, 68, 68, 0.18);
 }
 
 .welcome-box h1 {
@@ -156,7 +156,7 @@ button {
 }
 
 .welcome-box h1 span {
-    color: #9b6cff;
+    color: #fca5a5;
 }
 
 .welcome-box p {
@@ -192,13 +192,13 @@ button {
     background:
         linear-gradient(
             135deg,
-            #7c3aed,
-            #a855f7
+            #dc2626,
+            #f87171
         );
 
     box-shadow:
         0 10px 30px
-        rgba(124, 58, 237, 0.25);
+        rgba(220, 38, 38, 0.25);
 
     transition: 0.25s ease;
 }
@@ -208,7 +208,7 @@ button {
 
     box-shadow:
         0 15px 40px
-        rgba(124, 58, 237, 0.4);
+        rgba(220, 38, 38, 0.4);
 }
 
 .main-button i {
@@ -338,14 +338,14 @@ button {
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.35);
+        rgba(239, 68, 68, 0.35);
 
     box-shadow:
         0 35px 100px
         rgba(0, 0, 0, 0.75),
 
         0 0 45px
-        rgba(124, 58, 237, 0.12);
+        rgba(220, 38, 38, 0.12);
 
     backdrop-filter: blur(22px);
 
@@ -412,26 +412,26 @@ button {
     background:
         linear-gradient(
             145deg,
-            rgba(124, 58, 237, 0.18),
-            rgba(168, 85, 247, 0.08)
+            rgba(220, 38, 38, 0.18),
+            rgba(248, 113, 113, 0.08)
         );
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.38);
+        rgba(239, 68, 68, 0.38);
 
-    color: #b79cff;
+    color: #fca5a5;
 
     font-size: 29px;
 
     box-shadow:
         0 0 35px
-        rgba(139, 92, 246, 0.15);
+        rgba(239, 68, 68, 0.15);
 
     filter:
         drop-shadow(
             0 0 10px
-            rgba(139, 92, 246, 0.45)
+            rgba(239, 68, 68, 0.45)
         );
 }
 
@@ -496,7 +496,7 @@ button {
     transform:
         translateY(-50%);
 
-    color: #a78bfa;
+    color: #f87171;
 
     font-size: 14px;
 
@@ -536,19 +536,19 @@ button {
 
 .input-group input:hover {
     border-color:
-        rgba(139, 92, 246, 0.3);
+        rgba(239, 68, 68, 0.3);
 }
 
 .input-group input:focus {
     border-color:
-        rgba(139, 92, 246, 0.75);
+        rgba(239, 68, 68, 0.75);
 
     background:
-        rgba(139, 92, 246, 0.055);
+        rgba(239, 68, 68, 0.055);
 
     box-shadow:
         0 0 22px
-        rgba(139, 92, 246, 0.12);
+        rgba(239, 68, 68, 0.12);
 }
 
 .input-group input::placeholder {
@@ -576,8 +576,8 @@ button {
     background:
         linear-gradient(
             135deg,
-            #7c3aed,
-            #a855f7
+            #dc2626,
+            #f87171
         );
 
     color: #ffffff;
@@ -590,7 +590,7 @@ button {
 
     box-shadow:
         0 12px 30px
-        rgba(124, 58, 237, 0.25);
+        rgba(220, 38, 38, 0.25);
 
     overflow: hidden;
 
@@ -631,7 +631,7 @@ button {
 
     box-shadow:
         0 18px 40px
-        rgba(124, 58, 237, 0.38);
+        rgba(220, 38, 38, 0.38);
 }
 
 .btn-login:active {
@@ -672,7 +672,7 @@ button {
 
     background: transparent;
 
-    color: #b79cff;
+    color: #fca5a5;
 
     font-size: 11px;
 
@@ -688,7 +688,7 @@ button {
 
     text-shadow:
         0 0 12px
-        rgba(167, 139, 250, 0.5);
+        rgba(248, 113, 113, 0.5);
 }
 
 
@@ -820,14 +820,14 @@ button {
 }
 
 .brand i {
-    color: #9b6cff;
+    color: #fca5a5;
 
     font-size: 20px;
 
     filter:
         drop-shadow(
             0 0 8px
-            rgba(139, 92, 246, 0.8)
+            rgba(239, 68, 68, 0.8)
         );
 }
 
@@ -870,7 +870,7 @@ button {
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.4);
+        rgba(239, 68, 68, 0.4);
 
     color: #ffffff;
 
@@ -887,7 +887,7 @@ button {
         rgba(0, 0, 0, 0.35),
 
         0 0 18px
-        rgba(139, 92, 246, 0.08);
+        rgba(239, 68, 68, 0.08);
 
     transition: 0.25s ease;
 }
@@ -911,9 +911,9 @@ button {
     border-radius: 8px;
 
     background:
-        rgba(139, 92, 246, 0.15);
+        rgba(239, 68, 68, 0.15);
 
-    color: #b79cff;
+    color: #fca5a5;
 
     font-size: 12px;
 }
@@ -922,14 +922,14 @@ button {
     transform: translateY(-2px);
 
     border-color:
-        rgba(139, 92, 246, 0.8);
+        rgba(239, 68, 68, 0.8);
 
     box-shadow:
         0 10px 30px
         rgba(0, 0, 0, 0.4),
 
         0 0 20px
-        rgba(139, 92, 246, 0.18);
+        rgba(239, 68, 68, 0.18);
 }
 
 
@@ -1082,7 +1082,7 @@ button {
     color: #ffffff;
 
     background:
-        rgba(139, 92, 246, 0.12);
+        rgba(239, 68, 68, 0.12);
 }
 
 .nav-button.active {
@@ -1091,13 +1091,13 @@ button {
     background:
         linear-gradient(
             135deg,
-            rgba(124, 58, 237, 0.8),
-            rgba(168, 85, 247, 0.7)
+            rgba(220, 38, 38, 0.8),
+            rgba(248, 113, 113, 0.7)
         );
 
     box-shadow:
         0 5px 20px
-        rgba(124, 58, 237, 0.2);
+        rgba(220, 38, 38, 0.2);
 }
 
 
@@ -1213,14 +1213,14 @@ button {
         translateY(-7px);
 
     border-color:
-        rgba(139, 92, 246, 0.45);
+        rgba(239, 68, 68, 0.45);
 
     box-shadow:
         0 30px 70px
         rgba(0, 0, 0, 0.55),
 
         0 0 25px
-        rgba(139, 92, 246, 0.08);
+        rgba(239, 68, 68, 0.08);
 }
 
 .home-image img {
@@ -1276,14 +1276,14 @@ button {
 
     border-radius: 999px;
 
-    color: #c4b5fd;
+    color: #fca5a5;
 
     background:
-        rgba(139, 92, 246, 0.1);
+        rgba(239, 68, 68, 0.1);
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.3);
+        rgba(239, 68, 68, 0.3);
 
     font-size: 11px;
 
@@ -1306,11 +1306,11 @@ button {
 .home-center h1 span {
     display: block;
 
-    color: #a78bfa;
+    color: #f87171;
 
     text-shadow:
         0 0 30px
-        rgba(139, 92, 246, 0.2);
+        rgba(239, 68, 68, 0.2);
 }
 
 .home-center p {
@@ -1340,8 +1340,8 @@ button {
     background:
         linear-gradient(
             135deg,
-            #7c3aed,
-            #a855f7
+            #dc2626,
+            #f87171
         );
 
     color: white;
@@ -1354,7 +1354,7 @@ button {
 
     box-shadow:
         0 12px 30px
-        rgba(124, 58, 237, 0.25);
+        rgba(220, 38, 38, 0.25);
 
     transition: 0.25s ease;
 }
@@ -1365,7 +1365,7 @@ button {
 
     box-shadow:
         0 18px 40px
-        rgba(124, 58, 237, 0.4);
+        rgba(220, 38, 38, 0.4);
 }
 
 .home-button i {
@@ -1395,13 +1395,13 @@ button {
     border-radius: 999px;
 
     background:
-        rgba(139, 92, 246, 0.1);
+        rgba(239, 68, 68, 0.1);
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.25);
+        rgba(239, 68, 68, 0.25);
 
-    color: #b9a4ff;
+    color: #fca5a5;
 
     font-size: 10px;
 
@@ -1469,7 +1469,7 @@ button {
         translateY(-6px);
 
     border-color:
-        rgba(139, 92, 246, 0.35);
+        rgba(239, 68, 68, 0.35);
 
     box-shadow:
         0 20px 45px
@@ -1490,13 +1490,13 @@ button {
     border-radius: 13px;
 
     background:
-        rgba(139, 92, 246, 0.12);
+        rgba(239, 68, 68, 0.12);
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.25);
+        rgba(239, 68, 68, 0.25);
 
-    color: #a78bfa;
+    color: #f87171;
 
     font-size: 19px;
 }
@@ -1563,7 +1563,7 @@ button {
         translateY(-7px);
 
     border-color:
-        rgba(139, 92, 246, 0.4);
+        rgba(239, 68, 68, 0.4);
 }
 
 .product-image {
@@ -1601,7 +1601,7 @@ button {
 
     border-radius: 8px;
 
-    background: #7c3aed;
+    background: #dc2626;
 
     color: white;
 
@@ -1613,11 +1613,11 @@ button {
 }
 
 .product-badge.popular {
-    background: #2563eb;
+    background: #7f1d1d;
 }
 
 .product-badge.elite {
-    background: #9333ea;
+    background: #dc2626;
 }
 
 .product-info {
@@ -1653,10 +1653,10 @@ button {
 
     border-radius: 8px;
 
-    color: #c4b5fd;
+    color: #fca5a5;
 
     background:
-        rgba(139, 92, 246, 0.08);
+        rgba(239, 68, 68, 0.08);
 
     font-size: 10px;
 
@@ -1680,8 +1680,8 @@ button {
     background:
         linear-gradient(
             135deg,
-            #7c3aed,
-            #9333ea
+            #dc2626,
+            #dc2626
         );
 
     color: white;
@@ -1701,7 +1701,7 @@ button {
 
     box-shadow:
         0 10px 25px
-        rgba(124, 58, 237, 0.3);
+        rgba(220, 38, 38, 0.3);
 }
 
 .btn-buy i {
@@ -1756,16 +1756,16 @@ button {
         translateY(-7px);
 
     border-color:
-        rgba(139, 92, 246, 0.4);
+        rgba(239, 68, 68, 0.4);
 }
 
 .price-card.featured {
     border-color:
-        rgba(139, 92, 246, 0.55);
+        rgba(239, 68, 68, 0.55);
 
     box-shadow:
         0 20px 60px
-        rgba(124, 58, 237, 0.12);
+        rgba(220, 38, 38, 0.12);
 }
 
 .featured-label {
@@ -1778,7 +1778,7 @@ button {
 
     border-radius: 7px;
 
-    background: #7c3aed;
+    background: #dc2626;
 
     font-size: 8px;
 
@@ -1800,14 +1800,14 @@ button {
 
     border-radius: 17px;
 
-    color: #b79cff;
+    color: #fca5a5;
 
     background:
-        rgba(139, 92, 246, 0.12);
+        rgba(239, 68, 68, 0.12);
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.25);
+        rgba(239, 68, 68, 0.25);
 
     font-size: 23px;
 }
@@ -1829,7 +1829,7 @@ button {
 .price small {
     font-size: 15px;
 
-    color: #a78bfa;
+    color: #f87171;
 
     vertical-align: top;
 
@@ -1864,7 +1864,7 @@ button {
 }
 
 .price-card li i {
-    color: #a78bfa;
+    color: #f87171;
 
     margin-right: 7px;
 }
@@ -1908,7 +1908,7 @@ button {
 
     border:
         1px solid
-        rgba(139, 92, 246, 0.3);
+        rgba(239, 68, 68, 0.3);
 
     box-shadow:
         0 30px 80px
@@ -1937,7 +1937,7 @@ button {
 .modal-icon {
     font-size: 35px;
 
-    color: #a78bfa;
+    color: #f87171;
 
     margin-bottom: 15px;
 }
@@ -1993,7 +1993,7 @@ button {
         rgba(255, 255, 255, 0.08);
 
     border-top-color:
-        #9b6cff;
+        #fca5a5;
 
     animation:
         spin 0.8s linear infinite;
@@ -2093,7 +2093,7 @@ button {
         background:
             radial-gradient(
                 circle at center,
-                rgba(124, 58, 237, 0.16),
+                rgba(220, 38, 38, 0.16),
                 rgba(0, 0, 0, 0.88)
             );
     }
