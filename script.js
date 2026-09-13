@@ -960,8 +960,8 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                         hideLoading();
 
                         showModal(
-                            "DATOS INCORRECTOS",
-                            "El usuario o la contraseña no son correctos."
+                            "USUARIO NO RECONOCIDO",
+                            "En este navegador no se encontró ese usuario. Entra con tu CORREO ELECTRÓNICO y contraseña, funciona en cualquier dispositivo y navegador."
                         );
 
                         return;
@@ -1006,10 +1006,38 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                        ENTRAR AL PANEL
                     ================================================== */
 
+                    const nombreMostrar =
+                        (
+                            data.user &&
+                            data.user.user_metadata &&
+                            data.user.user_metadata.username
+                        ) ||
+                        username;
+
+
+                    guardarCuentaLocal(
+                        nombreMostrar,
+                        emailCuenta
+                    );
+
+
+                    if (
+                        data.user
+                    ) {
+
+                        intentarInsertarPerfil(
+                            data.user.id,
+                            nombreMostrar,
+                            emailCuenta
+                        );
+
+                    }
+
+
                     hideLoading();
 
                     openPanel(
-                        username
+                        nombreMostrar
                     );
 
 
