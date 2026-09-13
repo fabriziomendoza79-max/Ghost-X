@@ -574,16 +574,6 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                     }
 
 
-                    if (
-                        !usuarioExiste &&
-                        obtenerCorreoLocal(username)
-                    ) {
-
-                        usuarioExiste = true;
-
-                    }
-
-
                     if (usuarioExiste) {
 
                         hideLoading();
