@@ -24,7 +24,7 @@ body {
     background: #050509;
     color: #ffffff;
 
-    cursor: none;
+    cursor: auto;
 }
 
 button,
@@ -33,7 +33,7 @@ input {
 }
 
 button {
-    cursor: none;
+    cursor: pointer;
 }
 
 
@@ -46,6 +46,8 @@ button {
 
     width: 28px;
     height: 28px;
+
+    display: none;
 
     background-image: url("cursor/mi-cursor.png");
     background-size: contain;
