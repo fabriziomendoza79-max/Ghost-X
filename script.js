@@ -641,6 +641,7 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                             */
 
                             const {
+                                data: loginData,
                                 error: loginError
                             } = await supabaseClient.auth.signInWithPassword({
 
@@ -657,6 +658,38 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                                     username,
                                     email
                                 );
+
+
+                                if (
+                                    loginData &&
+                                    loginData.user
+                                ) {
+
+                                    try {
+
+                                        await supabaseClient
+                                            .from("profiles")
+                                            .insert({
+
+                                                id: loginData.user.id,
+
+                                                username: username,
+
+                                                email: email
+
+                                            });
+
+                                    } catch (perfilError) {
+
+                                        console.error(
+                                            "Error creando perfil:",
+                                            perfilError
+                                        );
+
+                                    }
+
+                                }
+
 
                                 hideLoading();
 
