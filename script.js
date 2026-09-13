@@ -364,7 +364,9 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                 localStorage.getItem(accountsKey) || "{}"
             );
 
-            stored[username] = email;
+            const clave = username.toLowerCase();
+
+            stored[clave] = email;
 
             localStorage.setItem(
                 accountsKey,
@@ -390,7 +392,28 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                 localStorage.getItem(accountsKey) || "{}"
             );
 
-            return stored[username] || null;
+            const clave = username.toLowerCase();
+
+            if (stored[clave]) {
+
+                return stored[clave];
+
+            }
+
+            for (const key in stored) {
+
+                if (
+                    stored[key] &&
+                    key.toLowerCase() === clave
+                ) {
+
+                    return stored[key];
+
+                }
+
+            }
+
+            return null;
 
         } catch (error) {
 
@@ -603,25 +626,69 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                             error
                         );
 
-                        hideLoading();
-
-                        let mensaje =
-                            "No se pudo crear la cuenta.";
-
-                        if (
+                        const esCorreoUsado =
                             error.message
                                 .toLowerCase()
-                                .includes("already registered")
-                        ) {
+                                .includes("already registered");
 
-                            mensaje =
-                                "Ese correo ya está registrado.";
 
+                        if (esCorreoUsado) {
+
+                            /*
+                                Si la cuenta ya existe,
+                                se intenta entrar con
+                                los mismos datos.
+                            */
+
+                            const {
+                                error: loginError
+                            } = await supabaseClient.auth.signInWithPassword({
+
+                                email: email,
+
+                                password: password
+
+                            });
+
+
+                            if (!loginError) {
+
+                                guardarCuentaLocal(
+                                    username,
+                                    email
+                                );
+
+                                hideLoading();
+
+                                openPanel(
+                                    username
+                                );
+
+                                showModal(
+                                    "BIENVENIDO",
+                                    "Tu cuenta ya existía y entraste correctamente."
+                                );
+
+                                return;
+                            }
+
+
+                            hideLoading();
+
+                            showModal(
+                                "ERROR DE REGISTRO",
+                                "Ese correo ya está registrado pero la contraseña no coincide. Entra con tu contraseña real."
+                            );
+
+                            return;
                         }
+
+
+                        hideLoading();
 
                         showModal(
                             "ERROR DE REGISTRO",
-                            mensaje
+                            "No se pudo crear la cuenta."
                         );
 
                         return;
@@ -677,13 +744,6 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                     }
 
 
-                    hideLoading();
-
-
-                    /* =================================================
-                       LIMPIAR CAMPOS
-                    ================================================== */
-
                     if (usernameInput) {
                         usernameInput.value = "";
                     }
@@ -701,25 +761,15 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
                     }
 
 
-                    if (registerFormContainer) {
+                    hideLoading();
 
-                        registerFormContainer.style.display =
-                            "none";
-
-                    }
-
-
-                    if (loginFormContainer) {
-
-                        loginFormContainer.style.display =
-                            "block";
-
-                    }
-
+                    openPanel(
+                        username
+                    );
 
                     showModal(
                         "CUENTA CREADA",
-                        "Tu cuenta fue creada correctamente. Ahora puedes iniciar sesión."
+                        "Tu cuenta fue creada. Bienvenido a Ghost X."
                     );
 
 
@@ -802,50 +852,58 @@ const SUPABASE_KEY = "sb_publishable_V-d8DkvBE4kd5As2dhLxPw_7grfO9aQ";
 
                     let emailCuenta = null;
 
-                    try {
+                    if (username.includes("@")) {
 
-                        const {
-                            data: profile,
-                            error: profileError
-                        } = await supabaseClient
-                            .from("profiles")
-                            .select("email, username")
-                            .eq("username", username)
-                            .maybeSingle();
+                        emailCuenta = username;
+
+                    } else {
+
+                        try {
+
+                            const {
+                                data: profile,
+                                error: profileError
+                            } = await supabaseClient
+                                .from("profiles")
+                                .select("email, username")
+                                .eq("username", username)
+                                .maybeSingle();
 
 
-                        if (profileError) {
+                            if (profileError) {
+
+                                console.error(
+                                    "Error buscando usuario:",
+                                    profileError
+                                );
+
+                            }
+
+
+                            if (profile) {
+
+                                emailCuenta = profile.email;
+
+                            }
+
+                        } catch (error) {
 
                             console.error(
-                                "Error buscando usuario:",
-                                profileError
+                                "Error consultando la cuenta:",
+                                error
                             );
 
                         }
 
 
-                        if (profile) {
+                        if (!emailCuenta) {
 
-                            emailCuenta = profile.email;
+                            emailCuenta =
+                                obtenerCorreoLocal(
+                                    username
+                                );
 
                         }
-
-                    } catch (error) {
-
-                        console.error(
-                            "Error consultando la cuenta:",
-                            error
-                        );
-
-                    }
-
-
-                    if (!emailCuenta) {
-
-                        emailCuenta =
-                            obtenerCorreoLocal(
-                                username
-                            );
 
                     }
 
